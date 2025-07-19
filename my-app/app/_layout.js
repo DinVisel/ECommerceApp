@@ -20,6 +20,10 @@ export default function RootLayout() {
 						options={{ title: "Ürün Ekle" }}
 					/>
 					<Tabs.Screen name='cart/index' options={{ title: "Sepet" }} />
+					<Tabs.Screen
+						name='orders/index'
+						options={{ title: "Siparişlerim" }}
+					/>
 				</Tabs>
 			</CartProvider>
 		</AuthProvider>
