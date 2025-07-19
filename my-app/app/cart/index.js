@@ -1,18 +1,39 @@
 import React, { useContext } from "react";
 import { View, Text, FlatList, StyleSheet, Button, Alert } from "react-native";
 import { CartContext } from "../../contexts/cart.context.js";
+import API from "../../services/api.js";
+import { AuthContext } from "../../contexts/auth.context.js";
 
 const CartScreen = () => {
 	const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
+	const { user } = useContext(AuthContext);
 
 	const total = cartItems.reduce(
 		(acc, item) => acc + item.price * item.quantity,
 		0
 	);
 
-	const confirmOrder = () => {
-		Alert.alert("Succesfull", "Order Placed!");
-		clearCart();
+	const confirmOrder = async () => {
+		try {
+			const orderPayload = {
+				orderItems: cartItems.map((item) => ({
+					product: item._id,
+					quantity: item.quantity,
+				})),
+			};
+
+			await API.post("/orders", orderPayload, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+				},
+			});
+
+			Alert.alert("Successful", "Order Placed!");
+			clearCart();
+		} catch (err) {
+			console.error("Order could not sent:", err);
+			Alert.alert("Error", "Order could not get placed");
+		}
 	};
 
 	if (cartItems.lenght === 0) {
