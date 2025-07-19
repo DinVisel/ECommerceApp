@@ -19,6 +19,7 @@ export default function RootLayout() {
 						name='seller/add-product'
 						options={{ title: "Ürün Ekle" }}
 					/>
+					<Tabs.Screen name='cart/index' options={{ title: "Sepet" }} />
 				</Tabs>
 			</CartProvider>
 		</AuthProvider>
