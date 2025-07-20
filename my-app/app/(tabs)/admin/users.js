@@ -45,6 +45,46 @@ export default function AdminUsers() {
 		]);
 	};
 
+	const handleRoleChange = (targetUser) => {
+		const roles = ["user", "seller", "admin"];
+		const currentIndex = roles.indexOf(targetUser.role);
+		const nextRole = roles[(currentIndex + 1) % roles.length];
+
+		Alert.alert(
+			"Change Role",
+			`${targetUser.name} is changing role as "${targetUser.role}" → "${nextRole}"`,
+			[
+				{ text: "Cancel", style: "cancel" },
+				{
+					text: "Change",
+					onPress: async () => {
+						try {
+							const res = await API.put(
+								`/users/${targetUser._id}/role`,
+								{ role: nextRole },
+								{
+									headers: { Authorization: `Bearer ${user.token}` },
+								}
+							);
+							setUsers((prev) =>
+								prev.map((u) =>
+									u._id === targetUser._id ? { ...u, role: res.data.role } : u
+								)
+							);
+							Alert.alert(
+								"Successful",
+								`${targetUser.name} is now ${res.data.role}`
+							);
+						} catch (err) {
+							console.error(err);
+							Alert.alert("Error", "Role could not changed.");
+						}
+					},
+				},
+			]
+		);
+	};
+
 	const fetchUsers = async () => {
 		try {
 			const res = API.get("/users", {
@@ -77,6 +117,9 @@ export default function AdminUsers() {
 					<Text>Email: {item.email}</Text>
 					<Text>Rol: {item.role}</Text>
 					<Text>Kayıt: {new Date(item.createdAt).toLocaleDateString()}</Text>
+					<TouchableOpacity onPress={() => handleRoleChange(item)}>
+						<Text style={styles.roleButton}>🔄 Rolü Değiştir</Text>
+					</TouchableOpacity>
 
 					<TouchableOpacity onPress={() => handleDelete(item._id)}>
 						<Text style={styles.deleteButton}>🗑️ Sil</Text>
@@ -102,6 +145,11 @@ const styles = StyleSheet.create({
 	deleteButton: {
 		color: "red",
 		marginTop: 8,
+		fontWeight: "bold",
+	},
+	roleButton: {
+		color: "#0077cc",
+		marginTop: 4,
 		fontWeight: "bold",
 	},
 });
