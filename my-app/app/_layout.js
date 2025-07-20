@@ -24,6 +24,12 @@ export default function RootLayout() {
 						name='orders/index'
 						options={{ title: "Siparişlerim" }}
 					/>
+					{user?.role === "admin" && (
+						<Tabs.Screen
+							name='admin/orders'
+							options={{ title: "Admin Siparişler" }}
+						/>
+					)}
 				</Tabs>
 			</CartProvider>
 		</AuthProvider>
