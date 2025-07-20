@@ -29,6 +29,7 @@ const AdminOrders = () => {
 		} finally {
 			setLoading(false);
 		}
+		setOrders(res.data);
 	};
 	useEffect(() => {
 		fetchOrders();
