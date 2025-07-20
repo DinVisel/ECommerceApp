@@ -1,9 +1,10 @@
 import { Stack } from "expo-router";
 import { Tabs } from "expo-router";
-import { AuthProvider } from "../contexts/auth.context.js";
+import { AuthProvider, useAuth } from "../contexts/auth.context.js";
 import { CartProvider } from "../contexts/cart.context.js";
 
 export default function RootLayout() {
+	const { user } = useAuth();
 	return (
 		<AuthProvider>
 			<CartProvider>

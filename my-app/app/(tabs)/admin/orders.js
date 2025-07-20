@@ -7,8 +7,8 @@ import {
 	ActivityIndicator,
 	Alert,
 } from "react-native";
-import { AuthContext } from "../../contexts/AuthContext";
-import API from "../../services/api";
+import { AuthContext } from "../../../contexts/auth.context.js";
+import API from "../../../services/api";
 import { useRouter } from "expo-router";
 
 const AdminOrders = () => {
