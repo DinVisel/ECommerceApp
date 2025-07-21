@@ -45,10 +45,15 @@ const ProductListScreen = () => {
 
 	const renderItem = ({ item }) => (
 		<TouchableOpacity
-			style={styles.card}
+			style={[styles.card, { opacity: item.countInStock === 0 ? 0.5 : 1 }]}
 			onPress={() => router.push(`/products/${item._id}`)}
 		>
-			<Image source={{ uri: item.image }} style={styles.image} />
+			<Image
+				source={{
+					uri: item.image || "https://via.placeholder.com/80x80?text=Yok",
+				}}
+				style={styles.image}
+			/>
 			<View>
 				<Text style={styles.name}>{item.name}</Text>
 				<Text>{item.price}₺</Text>

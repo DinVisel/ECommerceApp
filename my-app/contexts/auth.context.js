@@ -31,8 +31,13 @@ export const AuthProvider = ({ children }) => {
 		}
 	};
 
-	useEffect(() => {
+	/*useEffect(() => {
 		loadUser();
+	}, []);*/
+
+	useEffect(() => {
+		// Geliştirme kolaylığı için direkt kullanıcı set ediliyor
+		setUser({ name: "Test Kullanıcı", role: "admin" }); // veya "user"
 	}, []);
 
 	return (
