@@ -6,7 +6,6 @@ import {
 	StyleSheet,
 	ActivityIndicator,
 	ScrollView,
-	Button,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import API from "../../services/api.js";
@@ -40,18 +39,33 @@ const ProductDetail = () => {
 
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
-			<Image source={{ uri: product.image }} style={styles.image} />
-			<Text style={styles.name}>{product.name}</Text>
-			<Text style={styles.price}>{product.price}₺</Text>
-			<Text style={styles.description}>{product.description}</Text>
-			<Text style={styles.stock}>Stok: {product.countInStock} pcs</Text>
-			<Button
-				title='Add to Cart'
-				onPress={() => {
-					addToCart(product);
-					alert("Product added to the cart!");
+			<Image
+				source={{
+					uri: product.image || "https://via.placeholder.com/300x300?text=Yok",
 				}}
+				style={styles.image}
 			/>
+			<Text style={styles.name}>{product.name}</Text>
+			<Text style={styles.price}>{product.price} ₺</Text>
+			<Text style={styles.description}>{product.description}</Text>
+			<Text style={styles.stock}>
+				{product.countInStock > 0
+					? `${product.countInStock} in stock`
+					: "Not available"}
+			</Text>
+
+			<TouchableOpacity
+				style={[
+					styles.button,
+					product.countInStock === 0 && { backgroundColor: "#ccc" },
+				]}
+				disabled={product.countInStock === 0}
+				onPress={() => addToCart(product)}
+			>
+				<Text style={styles.buttonText}>
+					{product.countInStock > 0 ? "Add to" : "Tükendi"}
+				</Text>
+			</TouchableOpacity>
 		</ScrollView>
 	);
 };
