@@ -20,8 +20,9 @@ const AdminOrders = () => {
 	const fetchOrders = async () => {
 		try {
 			const res = await API.get("/orders", {
-				headers: { Authorization: `Bearer${user.token}` },
+				headers: { Authorization: `Bearer ${user.token}` },
 			});
+			setOrders(res.data);
 		} catch (error) {
 			console.error("Admin orders could not recieved", error);
 			Alert.alert("Error", "Only admin users can see this page");
@@ -29,7 +30,6 @@ const AdminOrders = () => {
 		} finally {
 			setLoading(false);
 		}
-		setOrders(res.data);
 	};
 	useEffect(() => {
 		fetchOrders();

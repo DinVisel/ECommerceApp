@@ -36,7 +36,7 @@ const CartScreen = () => {
 		}
 	};
 
-	if (cartItems.lenght === 0) {
+	if (cartItems.length === 0) {
 		return (
 			<View style={styles.center}>
 				<Text>Cart is empty.</Text>

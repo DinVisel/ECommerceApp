@@ -34,7 +34,7 @@ export default function AdminUsers() {
 						await API.delete(`/users/${userId}`, {
 							headers: { Authorization: `Bearer ${user.token}` },
 						});
-						setUsers((prev) => prefetch.filter((u) => u._id !== userId));
+						setUsers((prev) => prev.filter((u) => u._id !== userId));
 						Alert.alert("Successful", "User deleted successfully");
 					} catch (error) {
 						console.error(error);
@@ -87,7 +87,7 @@ export default function AdminUsers() {
 
 	const fetchUsers = async () => {
 		try {
-			const res = API.get("/users", {
+			const res = await API.get("/users", {
 				headers: { Authorization: `Bearer ${user.token}` },
 			});
 			setUsers(res.data);

@@ -2,10 +2,10 @@ import React, { createContext, useState } from "react";
 
 export const CartContext = createContext();
 
-export const CartProvider = ({ childeren }) => {
+export const CartProvider = ({ children }) => {
 	const [cartItems, setCartItems] = useState([]);
 
-	const addToChart = (product) => {
+	const addToCart = (product) => {
 		const existing = cartItems.find((item) => item._id === product._id);
 
 		if (existing) {
@@ -31,9 +31,9 @@ export const CartProvider = ({ childeren }) => {
 
 	return (
 		<CartContext.Provider
-			value={{ cartItems, addToChart, removeFromCart, clearCart }}
+			value={{ cartItems, addToCart, removeFromCart, clearCart }}
 		>
-			{childeren}
+			{children}
 		</CartContext.Provider>
 	);
 };
