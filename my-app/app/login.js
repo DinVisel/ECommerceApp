@@ -16,16 +16,20 @@ const LoginScreen = () => {
 
 	const handleLogin = async () => {
 		try {
-			const res = await API.post("/users/login", form);
-			const { token, user } = res.data;
+			const res = await axios.post("http://localhost:3000/api/auth/login", {
+				email,
+				password,
+			});
 
-			await login(token, user); // context üzerinden kaydet
+			const token = res.data.token;
+			await login(token); // burası context'i güncelliyor
 
-			Alert.alert("Giriş Başarılı", `Hoş geldin ${user.name}`);
-			router.replace("/"); // anasayfaya yönlendir
+			router.replace("/"); // Ana sayfaya yönlendir
 		} catch (err) {
-			const message = err.response?.data?.message || "Giriş başarısız.";
-			Alert.alert("Hata", message);
+			Alert.alert(
+				"Giriş Başarısız",
+				err.response?.data?.message || "Bir hata oluştu"
+			);
 		}
 	};
 
