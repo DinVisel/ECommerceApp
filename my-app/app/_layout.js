@@ -5,27 +5,25 @@ function TabsLayout() {
 	const { user } = useAuth();
 
 	return (
-		<Tabs
-			screenOptions={{
-				tabBarActiveTintColor: "#007aff",
-				tabBarLabelStyle: { fontSize: 12 },
-			}}
-		>
-			<Tabs.Screen name='index' options={{ title: "Ana Sayfa" }} />
-			<Tabs.Screen name='products/index' options={{ title: "Ürünler" }} />
-			<Tabs.Screen name='seller/add-product' options={{ title: "Ürün Ekle" }} />
-			<Tabs.Screen name='cart/index' options={{ title: "Sepet" }} />
-			<Tabs.Screen name='orders/index' options={{ title: "Siparişlerim" }} />
+		<Tabs>
+			<Tabs.Screen name='products' options={{ title: "Ürünler" }} />
+			<Tabs.Screen name='cart' options={{ title: "Sepet" }} />
+			<Tabs.Screen name='orders' options={{ title: "Siparişler" }} />
+
+			{user?.role === "seller" && (
+				<Tabs.Screen
+					name='(tabs)/seller/add-product'
+					options={{ title: "Ürün Ekle" }}
+				/>
+			)}
+
 			{user?.role === "admin" && (
 				<>
 					<Tabs.Screen
-						name='(tabs)/admin/orders'
+						name='admin/orders'
 						options={{ title: "Admin Siparişler" }}
 					/>
-					<Tabs.Screen
-						name='(tabs)/admin/users'
-						options={{ title: "Admin Kullanıcılar" }}
-					/>
+					<Tabs.Screen name='admin/users' options={{ title: "Kullanıcılar" }} />
 				</>
 			)}
 		</Tabs>
