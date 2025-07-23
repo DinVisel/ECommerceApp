@@ -5,55 +5,69 @@ import {
 	FlatList,
 	StyleSheet,
 	ActivityIndicator,
+	TouchableOpacity,
 } from "react-native";
-import API from "../../services/api.js";
-import { AuthContext } from "../../contexts/auth.context.js";
+import API from "../../services/api";
+import { useRouter } from "expo-router";
+import { AuthContext } from "../../contexts/auth.context";
 
-const OrdersScreen = () => {
-	const { user } = useContext(AuthContext);
+const MyOrdersScreen = () => {
 	const [orders, setOrders] = useState([]);
 	const [loading, setLoading] = useState(true);
-
-	const fetchOrders = async () => {
-		try {
-			const res = await API.get("/orders/myorders", {
-				headers: { Authorization: `Bearer ${user.token}` },
-			});
-			setOrders(res.data);
-		} catch (error) {
-			console.error("Could not fetched the orders", error);
-		} finally {
-			setLoading(false);
-		}
-	};
+	const router = useRouter();
+	const { user } = useContext(AuthContext);
 
 	useEffect(() => {
-		fetchOrders();
+		const fetchOrders = async () => {
+			try {
+				const res = await API.get("/orders/myorders", {
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				});
+				setOrders(res.data);
+			} catch (err) {
+				console.error("Failed to load orders", err);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		if (user?.token) {
+			fetchOrders();
+		}
 	}, []);
 
-	if (loading)
-		return <ActivityIndicator size='large' style={{ marginTop: 40 }} />;
+	if (loading) {
+		return <ActivityIndicator size='large' style={{ marginTop: 30 }} />;
+	}
 
 	if (orders.length === 0) {
 		return (
-			<View style={styles.container}>
-				<Text>You do not have any orders.</Text>
+			<View style={styles.center}>
+				<Text>No orders found</Text>
 			</View>
 		);
 	}
+
+	const renderItem = ({ item }) => (
+		<TouchableOpacity
+			style={styles.card}
+			onPress={() => router.push(`/orders/${item._id}`)} // Opsiyonel: detay sayfası
+		>
+			<Text style={styles.id}>Order ID: {item._id}</Text>
+			<Text>Date: {new Date(item.createdAt).toLocaleDateString()}</Text>
+			<Text>Total: {item.totalPrice}₺</Text>
+			<Text>Status: {item.isDelivered ? "Delivered" : "Pending"}</Text>
+		</TouchableOpacity>
+	);
+
 	return (
 		<FlatList
 			data={orders}
+			renderItem={renderItem}
 			keyExtractor={(item) => item._id}
-			contentContainerStyle={{ padding: 15 }}
-			renderItem={({ item }) => (
-				<View style={styles.card}>
-					<Text style={styles.title}>Sipariş ID: {item._id}</Text>
-					<Text>Ürün Sayısı: {item.orderItems.length}</Text>
-					<Text>Toplam: {item.totalPrice || "N/A"}₺</Text>
-					<Text>Tarih: {new Date(item.createdAt).toLocaleDateString()}</Text>
-				</View>
-			)}
+			contentContainerStyle={{ padding: 10 }}
 		/>
 	);
 };
@@ -61,12 +75,16 @@ const OrdersScreen = () => {
 const styles = StyleSheet.create({
 	center: { flex: 1, justifyContent: "center", alignItems: "center" },
 	card: {
-		backgroundColor: "#f4f4f4",
+		backgroundColor: "#fff",
 		padding: 15,
-		marginBottom: 10,
 		borderRadius: 10,
+		elevation: 2,
+		marginBottom: 12,
 	},
-	title: { fontWeight: "bold", marginBottom: 5 },
+	id: {
+		fontWeight: "bold",
+		marginBottom: 4,
+	},
 });
 
-export default OrdersScreen;
+export default MyOrdersScreen;
