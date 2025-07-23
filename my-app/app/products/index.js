@@ -36,7 +36,7 @@ const ProductListScreen = () => {
 			});
 			setProducts(res.data);
 		} catch (error) {
-			console.error("Ürünler yüklenemedi", error);
+			console.error("Failed to load products", error);
 		} finally {
 			setLoading(false);
 		}
@@ -49,6 +49,14 @@ const ProductListScreen = () => {
 		} catch (error) {
 			console.error("Kategoriler alınamadı", error);
 		}
+	};
+
+	const resetFilters = () => {
+		setKeyword("");
+		setCategory("");
+		setMinPrice("");
+		setMaxPrice("");
+		loadProducts();
 	};
 
 	useEffect(() => {
@@ -89,6 +97,16 @@ const ProductListScreen = () => {
 
 	return (
 		<View style={{ flex: 1 }}>
+			<View style={{ padding: 10 }}>
+				<TextInput
+					placeholder='Search products...'
+					value={keyword}
+					onChangeText={(text) => setKeyword(text)}
+					onSubmitEditing={loadProducts}
+					style={styles.searchInput}
+				/>
+			</View>
+
 			{/* Category Filter */}
 			<View style={{ paddingHorizontal: 10, marginBottom: 10 }}>
 				<ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -126,6 +144,37 @@ const ProductListScreen = () => {
 				</ScrollView>
 			</View>
 
+			<View
+				style={{
+					flexDirection: "row",
+					paddingHorizontal: 10,
+					marginBottom: 10,
+				}}
+			>
+				<TextInput
+					placeholder='Min price'
+					value={minPrice}
+					onChangeText={setMinPrice}
+					keyboardType='numeric'
+					style={[styles.priceInput, { marginRight: 8 }]}
+				/>
+				<TextInput
+					placeholder='Max price'
+					value={maxPrice}
+					onChangeText={setMaxPrice}
+					keyboardType='numeric'
+					style={styles.priceInput}
+				/>
+				<TouchableOpacity onPress={loadProducts} style={styles.filterButton}>
+					<Text style={{ color: "#fff" }}>Filter</Text>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={resetFilters} style={styles.clearButton}>
+					<Text style={{ color: "#fff", textAlign: "center" }}>
+						Clear Filters
+					</Text>
+				</TouchableOpacity>
+			</View>
+
 			{/* Product List */}
 			<FlatList
 				data={products}
@@ -158,6 +207,35 @@ const styles = StyleSheet.create({
 	},
 	selectedCategory: {
 		backgroundColor: "#2196F3",
+	},
+	searchInput: {
+		backgroundColor: "#f0f0f0",
+		paddingHorizontal: 12,
+		paddingVertical: 8,
+		borderRadius: 10,
+		marginBottom: 10,
+	},
+	priceInput: {
+		flex: 1,
+		backgroundColor: "#f0f0f0",
+		paddingHorizontal: 10,
+		paddingVertical: 8,
+		borderRadius: 10,
+	},
+	filterButton: {
+		backgroundColor: "#2196F3",
+		paddingHorizontal: 16,
+		paddingVertical: 8,
+		borderRadius: 10,
+		marginLeft: 8,
+		justifyContent: "center",
+	},
+	clearButton: {
+		backgroundColor: "#888",
+		padding: 10,
+		borderRadius: 10,
+		marginHorizontal: 10,
+		marginBottom: 10,
 	},
 });
 
