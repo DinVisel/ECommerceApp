@@ -1,0 +1,9 @@
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzdjMDQ2MzQ4Y2Y5MGRjY2IwNGNmZiIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE3NTI2Nzg0OTEsImV4cCI6MTc1Mjc2NDg5MX0.0nVt9XmcTQ2xI-eN2QPUau9GF_gY5sXKS83U8hdalp4",
+  "user": {
+    "id": "6877c046348cf90dccb04cff",
+    "name": "Arda",
+    "email": "arda@example.com",
+    "isAdmin": false
+  }
+}
