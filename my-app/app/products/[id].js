@@ -6,6 +6,7 @@ import {
 	StyleSheet,
 	ActivityIndicator,
 	ScrollView,
+	Button,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import API from "../../services/api.js";
@@ -56,7 +57,7 @@ const ProductDetail = () => {
 
 			<TouchableOpacity
 				style={[
-					styles.button,
+					styles.addButton,
 					product.countInStock === 0 && { backgroundColor: "#ccc" },
 				]}
 				disabled={product.countInStock === 0}
@@ -78,6 +79,12 @@ const styles = StyleSheet.create({
 	description: { fontSize: 16, color: "#333", marginBottom: 10 },
 	stock: { fontSize: 14, color: "#888" },
 	error: { padding: 20, textAlign: "center", fontSize: 18 },
+	addButton: {
+		backgroundColor: "#2196F3",
+		padding: 12,
+		borderRadius: 8,
+		marginTop: 20,
+	},
 });
 
 export default ProductDetail;

@@ -3,9 +3,17 @@ import { View, Text, FlatList, StyleSheet, Button, Alert } from "react-native";
 import { CartContext } from "../../contexts/cart.context.js";
 import API from "../../services/api.js";
 import { AuthContext } from "../../contexts/auth.context.js";
+import { router } from "expo-router";
 
 const CartScreen = () => {
-	const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
+	const {
+		cartItems,
+		increaseQuantity,
+		decreaseQuantity,
+		removeFromCart,
+		clearCart,
+	} = useContext(CartContext);
+
 	const { user } = useContext(AuthContext);
 
 	const total = cartItems.reduce(
@@ -29,7 +37,7 @@ const CartScreen = () => {
 			});
 
 			Alert.alert("Successful", "Order Placed!");
-			clearCart();
+			router.push("/cart/checkout");
 		} catch (err) {
 			console.error("Order could not sent:", err);
 			Alert.alert("Error", "Order could not get placed");
@@ -44,25 +52,46 @@ const CartScreen = () => {
 		);
 	}
 
+	const renderItem = ({ item }) => (
+		<View style={styles.item}>
+			<Text style={styles.name}>{item.name}</Text>
+			<Text style={{ marginVertical: 4 }}>
+				{item.quantity} x {item.price}₺
+			</Text>
+
+			<View style={styles.row}>
+				<TouchableOpacity
+					style={styles.qtyButton}
+					onPress={() => decreaseQuantity(item._id)}
+				>
+					<Text>-</Text>
+				</TouchableOpacity>
+
+				<Text style={{ marginHorizontal: 10 }}>{item.quantity}</Text>
+
+				<TouchableOpacity
+					style={styles.qtyButton}
+					onPress={() => increaseQuantity(item._id)}
+				>
+					<Text>+</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					style={styles.removeButton}
+					onPress={() => removeFromCart(item._id)}
+				>
+					<Text style={{ color: "white" }}>X</Text>
+				</TouchableOpacity>
+			</View>
+		</View>
+	);
+
 	return (
 		<View style={{ flex: 1, padding: 20 }}>
 			<FlatList
 				data={cartItems}
 				keyExtractor={(item) => item._id}
-				renderItem={({ item }) => (
-					<View style={styles.card}>
-						<View style={{ flex: 1 }}>
-							<Text style={styles.name}>{item.name}</Text>
-							<Text>
-								{item.quantity} x {item.price}₺
-							</Text>
-							<Text style={{ fontWeight: "bold" }}>
-								{item.quantity * item.price}₺
-							</Text>
-						</View>
-						<Button title='Delete' onPress={() => removeFromCart(item._id)} />
-					</View>
-				)}
+				renderItem={renderItem}
 			/>
 			<View style={styles.footer}>
 				<Text style={styles.total}>Total: {total}₺</Text>
@@ -90,6 +119,23 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	total: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },
+	row: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginTop: 5,
+	},
+	qtyButton: {
+		backgroundColor: "#eee",
+		padding: 6,
+		borderRadius: 4,
+	},
+	removeButton: {
+		backgroundColor: "#ff4d4d",
+		paddingHorizontal: 8,
+		paddingVertical: 4,
+		borderRadius: 4,
+		marginLeft: 10,
+	},
 });
 
 export default CartScreen;
