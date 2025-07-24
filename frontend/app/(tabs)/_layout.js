@@ -41,21 +41,21 @@ function TabsLayout() {
 			{user?.role === "admin" && (
 				<>
 					<Tabs.Screen
-						name='(tabs)/admin/orders'
+						name='../admin/orders'
 						options={{
 							title: "Admin Orders",
 							tabBarButton: () => null, // hide from bottom tab
 						}}
 					/>
 					<Tabs.Screen
-						name='(tabs)/admin/users'
+						name='../admin/users'
 						options={{
 							title: "Admin Users",
 							tabBarButton: () => null,
 						}}
 					/>
 					<Tabs.Screen
-						name='(tabs)/admin/dashboard'
+						name='../admin/dashboard'
 						options={{
 							title: "Dashboard",
 							tabBarButton: () => null,

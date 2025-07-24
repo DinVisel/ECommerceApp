@@ -50,10 +50,11 @@ const AdminOrders = () => {
 	};
 
 	useEffect(() => {
-		if (user?.isAdmin) {
+		if (user?.role === "admin") {
 			fetchOrders();
 		}
 	}, []);
+
 	if (loading)
 		return <ActivityIndicator size='large' style={{ marginTop: 40 }} />;
 

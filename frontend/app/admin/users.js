@@ -24,14 +24,14 @@ export default function AdminUsers() {
 			return;
 		}
 
-		Alert.alert("Are you sure", [
+		Alert.alert("Are you sure", "This action cannot be undone", [
 			{ text: "Cancel", style: "cancel" },
 			{
 				text: "Delete",
 				style: "destructive",
 				onPress: async () => {
 					try {
-						await API.delete(`/users/${userId}`, {
+						await API.delete(`/admin/users/${userId}`, {
 							headers: { Authorization: `Bearer ${user.token}` },
 						});
 						setUsers((prev) => prev.filter((u) => u._id !== userId));
@@ -60,7 +60,7 @@ export default function AdminUsers() {
 					onPress: async () => {
 						try {
 							const res = await API.put(
-								`/users/${targetUser._id}/role`,
+								`/admin/users/${targetUser._id}/role`,
 								{ role: nextRole },
 								{
 									headers: { Authorization: `Bearer ${user.token}` },
@@ -87,7 +87,7 @@ export default function AdminUsers() {
 
 	const fetchUsers = async () => {
 		try {
-			const res = await API.get("/users", {
+			const res = await API.get("/admin/users", {
 				headers: { Authorization: `Bearer ${user.token}` },
 			});
 			setUsers(res.data);

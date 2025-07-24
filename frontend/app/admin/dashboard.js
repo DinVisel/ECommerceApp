@@ -24,7 +24,7 @@ const AdminDashboardScreen = () => {
 
 	const loadGraphData = async () => {
 		try {
-			const res = API.get("/admin/dashboard/stats", {
+			const res = await API.get("/admin/dashboard/stats", {
 				headers: { Authorization: `Bearer ${user.token}` },
 			});
 			setGraphData(res.data);
@@ -35,7 +35,7 @@ const AdminDashboardScreen = () => {
 
 	const loadDashboard = async () => {
 		try {
-			const res = API.get("/admin/dashboard", {
+			const res = await API.get("/admin/dashboard", {
 				headers: { Authorization: `Bearer ${user.token}` },
 			});
 
@@ -86,7 +86,7 @@ const AdminDashboardScreen = () => {
 	);
 
 	useEffect(() => {
-		if (user?.isAdmin) {
+		if (user?.role === "admin") {
 			loadDashboard();
 			loadGraphData();
 			loadExtraStats();

@@ -6,7 +6,7 @@ import {
 	StyleSheet,
 	ActivityIndicator,
 	ScrollView,
-	Button,
+	TouchableOpacity,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import API from "../../services/api.js";
@@ -20,7 +20,7 @@ const ProductDetail = () => {
 
 	const fetchProduct = async () => {
 		try {
-			const res = API.get(`/products/${id}`);
+			const res = await API.get(`/products/${id}`);
 			setProduct(res.data);
 		} catch (error) {
 			console.error("Could not fetch product data", error);

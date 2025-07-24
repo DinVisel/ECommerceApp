@@ -15,8 +15,8 @@ export const createOrder = async (req, res) => {
 			totalPrice,
 		});
 
-		const createOrder = await order.save();
-		res.status(201).jsoun(createOrder);
+		const createdOrder = await order.save();
+		res.status(201).json(createdOrder);
 	} catch (error) {
 		res.status(500).json({ message: "Server error" });
 	}
@@ -24,7 +24,7 @@ export const createOrder = async (req, res) => {
 
 export const markOrderAsPaid = async (req, res) => {
 	try {
-		const order = await Order.findById(req.params._id);
+		const order = await Order.findById(req.params.id);
 
 		if (order) {
 			order.isPaid = true;
@@ -42,7 +42,7 @@ export const markOrderAsPaid = async (req, res) => {
 
 export const markOrderAsDelivered = async (req, res) => {
 	try {
-		const order = await Order.findById(req.params._id);
+		const order = await Order.findById(req.params.id);
 
 		if (order) {
 			order.isDelivered = true;

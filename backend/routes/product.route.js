@@ -6,7 +6,7 @@ import {
 	updateProduct,
 	deleteProduct,
 	getCategories,
-} from "../controllers/porduct.controller.js";
+} from "../controllers/product.controller.js";
 import { protect, authorizeRoles } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();

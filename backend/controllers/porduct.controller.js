@@ -68,6 +68,11 @@ export const updateProduct = async (req, res) => {
 			product.price = price || product.price;
 			product.image = image || product.image;
 			product.countInStock = countInStock || product.countInStock;
+
+			const updatedProduct = await product.save();
+			res.json(updatedProduct);
+		} else {
+			res.status(404).json({ message: "Product not found" });
 		}
 	} catch (error) {
 		res.status(500).json({ message: "Failed to update product" });

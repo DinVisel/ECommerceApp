@@ -1,5 +1,13 @@
 import React, { useContext } from "react";
-import { View, Text, FlatList, StyleSheet, Button, Alert } from "react-native";
+import {
+	View,
+	Text,
+	FlatList,
+	StyleSheet,
+	Button,
+	Alert,
+	TouchableOpacity,
+} from "react-native";
 import { CartContext } from "../../contexts/cart.context.js";
 import API from "../../services/api.js";
 import { AuthContext } from "../../contexts/auth.context.js";
