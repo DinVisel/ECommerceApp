@@ -6,10 +6,11 @@ import {
 	ActivityIndicator,
 	ScrollView,
 } from "react-native";
-import { AuthContext } from "../../../contexts/auth.context.js";
-import API from "../../../services/api.js";
+import { AuthContext } from "../../contexts/auth.context.js";
+import API from "../../services/api.js";
 import { LineChart } from "react-native-chart-kit";
-import { Dimensions } from "react-native";
+import { Dimensions, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
 
 const AdminDashboardScreen = () => {
 	const { user } = useContext(AuthContext);
@@ -60,6 +61,29 @@ const AdminDashboardScreen = () => {
 			console.error("Extra stats error", error);
 		}
 	};
+
+	const PreviewCard = ({ title, onPress, chartData }) => (
+		<TouchableOpacity style={styles.previewCard} onPress={onPress}>
+			<Text style={styles.previewTitle}>{title}</Text>
+			<LineChart
+				data={chartData}
+				width={Dimensions.get("window").width * 0.8}
+				height={160}
+				withDots={false}
+				withInnerLines={false}
+				withOuterLines={false}
+				chartConfig={{
+					backgroundGradientFrom: "#fff",
+					backgroundGradientTo: "#fff",
+					color: () => `#2c3e50`,
+					labelColor: () => "#999",
+					strokeWidth: 2,
+				}}
+				bezier
+			/>
+			<Text style={styles.previewHint}>View Details →</Text>
+		</TouchableOpacity>
+	);
 
 	useEffect(() => {
 		if (user?.isAdmin) {
@@ -155,6 +179,45 @@ const AdminDashboardScreen = () => {
 					</Text>
 				))}
 			</View>
+			<View style={styles.previewGrid}>
+				<PreviewCard
+					title='Top Products'
+					onPress={() => router.push("/admin/topProductsChart")}
+					chartData={{
+						labels: stats.topProducts.map((p) => p.name),
+						datasets: [{ data: stats.topProducts.map((p) => p.totalSales) }],
+					}}
+				/>
+				<PreviewCard
+					title='Monthly Revenue'
+					onPress={() => router.push("/admin/monthlyRevenue")}
+					chartData={{
+						labels: stats.monthlyRevenue.map((item) => item.month),
+						datasets: [
+							{ data: stats.monthlyRevenue.map((item) => item.revenue) },
+						],
+					}}
+				/>
+				<PreviewCard
+					title='Categories by Product Count'
+					onPress={() => router.push("/admin/categoryChart")}
+					chartData={{
+						labels: stats.categoryChart.map((c) => c.name),
+						datasets: [
+							{ data: stats.categoryChart.map((c) => c.productCount) },
+						],
+					}}
+				/>
+
+				<PreviewCard
+					title='Top Users by Order Count'
+					onPress={() => router.push("/admin/topUsersChart")}
+					chartData={{
+						labels: stats.topUsers.map((u) => u.name),
+						datasets: [{ data: stats.topUsers.map((u) => u.totalOrders) }],
+					}}
+				/>
+			</View>
 		</ScrollView>
 	);
 };
@@ -172,6 +235,28 @@ const styles = StyleSheet.create({
 	label: { fontSize: 16, color: "#555" },
 	value: { fontSize: 20, fontWeight: "bold", marginTop: 4 },
 	center: { flex: 1, justifyContent: "center", alignItems: "center" },
+	previewGrid: {
+		marginTop: 30,
+		gap: 20,
+		alignItems: "center",
+	},
+	previewCard: {
+		backgroundColor: "#fff",
+		padding: 10,
+		borderRadius: 10,
+		elevation: 2,
+		width: "100%",
+	},
+	previewTitle: {
+		fontSize: 16,
+		fontWeight: "600",
+		marginBottom: 5,
+	},
+	previewHint: {
+		color: "#007bff",
+		marginTop: 5,
+		textAlign: "right",
+	},
 });
 
 export default AdminDashboardScreen;

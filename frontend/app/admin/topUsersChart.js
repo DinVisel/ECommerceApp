@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Dimensions } from "react-native";
 import { BarChart } from "react-native-chart-kit";
-import API from "../../../services/api.js";
-import { useAuth } from "../../../contexts/auth.context.js";
+import API from "../../services/api.js";
+import { useAuth } from "../../contexts/auth.context.js";
 
 const screenWidth = Dimensions.get("window").width;
 

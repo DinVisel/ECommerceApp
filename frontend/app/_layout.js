@@ -5,26 +5,36 @@ function TabsLayout() {
 	const { user } = useAuth();
 
 	return (
-		<Tabs>
-			<Tabs.Screen name='products' options={{ title: "Ürünler" }} />
-			<Tabs.Screen name='cart' options={{ title: "Sepet" }} />
-			<Tabs.Screen name='orders' options={{ title: "Siparişler" }} />
+		<Tabs
+			screenOptions={({ route }) => ({
+				tabBarIcon: ({ color, size }) => {
+					let iconName;
 
-			{user?.role === "seller" && (
-				<Tabs.Screen
-					name='(tabs)/seller/add-product'
-					options={{ title: "Ürün Ekle" }}
-				/>
+					if (route.name === "index") iconName = "home";
+					else if (route.name === "cart") iconName = "cart";
+					else if (route.name === "categories") iconName = "apps";
+					else if (route.name === "account") iconName = "person";
+
+					return <Ionicons name={iconName} size={size} color={color} />;
+				},
+				tabBarActiveTintColor: "#007aff",
+				tabBarInactiveTintColor: "gray",
+				headerShown: false,
+			})}
+		>
+			<Tabs.Screen name='index' options={{ title: "Home" }} />
+			<Tabs.Screen name='categories' options={{ title: "Categories" }} />
+			<Tabs.Screen name='cart' options={{ title: "Cart" }} />
+			<Tabs.Screen name='account' options={{ title: "Account" }} />
+
+			{/* Sadece admin için */}
+			{user?.role === "admin" && (
+				<Tabs.Screen name='admin/dashboard' options={{ title: "Admin" }} />
 			)}
 
-			{user?.role === "admin" && (
-				<>
-					<Tabs.Screen
-						name='admin/orders'
-						options={{ title: "Admin Siparişler" }}
-					/>
-					<Tabs.Screen name='admin/users' options={{ title: "Kullanıcılar" }} />
-				</>
+			{/* Sadece seller için */}
+			{user?.role === "seller" && (
+				<Tabs.Screen name='seller/add-product' options={{ title: "Sell" }} />
 			)}
 		</Tabs>
 	);
