@@ -89,3 +89,76 @@ export const getGraph = async (req, res) => {
 	]);
 	res.json(stats);
 };
+
+export const getTopProducts = async (req, res) => {
+	const products = await Order.aggregate([
+		{ $unwind: "$orderItems" },
+		{
+			$group: {
+				_id: "$orderItems.name",
+				totalSold: { $sum: "$orderItems.qty" },
+			},
+		},
+		{ $sort: { totalSold: -1 } },
+		{ $limit: 5 },
+	]);
+
+	res.json(products);
+};
+
+export const getTopUsers = async (req, res) => {
+	const users = await Order.aggregate([
+		{
+			$group: {
+				_id: "$user",
+				totalSpent: { $sum: "$totalPrice" },
+				orderCount: { $sum: 1 },
+			},
+		},
+		{ $sort: { totalSpent: -1 } },
+		{ $limit: 5 },
+		{
+			$lookup: {
+				from: "users",
+				localField: "_id",
+				foreignField: "_id",
+				as: "userInfo",
+			},
+		},
+		{ $unwind: "$userInfo" },
+		{
+			$project: {
+				name: "$userInfo.name",
+				email: "$userInfo.email",
+				totalSpent: 1,
+				orderCount: 1,
+			},
+		},
+	]);
+
+	res.json(users);
+};
+
+export const getCategorySales = async (req, res) => {
+	const stats = await Order.aggregate([
+		{ $unwind: "$orderItems" },
+		{
+			$lookup: {
+				from: "products",
+				localField: "orderItems.product",
+				foreignField: "_id",
+				as: "productInfo",
+			},
+		},
+		{ $unwind: "$productInfo" },
+		{
+			$group: {
+				_id: "$productInfo.category",
+				totalSold: { $sum: "$orderItems.qty" },
+			},
+		},
+		{ $sort: { totalSold: -1 } },
+	]);
+
+	res.json(stats);
+};

@@ -16,6 +16,10 @@ const AdminDashboardScreen = () => {
 	const [loading, setLoading] = useEffect(true);
 	const [stats, setStats] = useState(null);
 	const [graphData, setGraphData] = useState([]);
+	const [topProducts, setTopProducts] = useState([]);
+	const [topUsers, setTopUsers] = useState([]);
+	const [categoryStats, setCategoryStats] = useState([]);
+	const headers = { Authorization: `Bearer ${user.token}` };
 
 	const loadGraphData = async () => {
 		try {
@@ -42,10 +46,26 @@ const AdminDashboardScreen = () => {
 		}
 	};
 
+	const loadExtraStats = async () => {
+		try {
+			const [productsRes, usersRes, categoriesRes] = await Promise.all([
+				API.get("/admin/dashboard/top-products", { headers }),
+				API.get("/admin/dashboard/top-users", { headers }),
+				API.get("/admin/dashboard/category-sales", { headers }),
+			]);
+			setTopProducts(productsRes.data);
+			setTopUsers(usersRes.data);
+			setCategoryStats(categoriesRes.data);
+		} catch (error) {
+			console.error("Extra stats error", error);
+		}
+	};
+
 	useEffect(() => {
 		if (user?.isAdmin) {
 			loadDashboard();
 			loadGraphData();
+			loadExtraStats();
 		}
 	}, []);
 
@@ -110,6 +130,30 @@ const AdminDashboardScreen = () => {
 						borderRadius: 8,
 					}}
 				/>
+			</View>
+			<View>
+				<Text style={styles.sectionTitle}>Top 5 Selling Products</Text>
+				{topProducts.map((p, i) => (
+					<Text key={i}>
+						{p._id} – {p.totalSold} pcs
+					</Text>
+				))}
+			</View>
+			<View>
+				<Text style={styles.sectionTitle}>Top 5 Active Users</Text>
+				{topUsers.map((u, i) => (
+					<Text key={i}>
+						{u.name} ({u.email}) – {u.orderCount} orders, {u.totalSpent}₺
+					</Text>
+				))}
+			</View>
+			<View>
+				<Text style={styles.sectionTitle}>Sales by Category</Text>
+				{categoryStats.map((cat, i) => (
+					<Text key={i}>
+						{cat._id}: {cat.totalSold} units
+					</Text>
+				))}
 			</View>
 		</ScrollView>
 	);
