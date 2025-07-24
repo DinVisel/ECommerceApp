@@ -64,3 +64,28 @@ export const getDashboard = async (req, res) => {
 		res.status(500).json({ message: "Dashboard data error", error: error });
 	}
 };
+
+export const getGraph = async (req, res) => {
+	const today = new Date();
+	const sevenDaysAgo = new Date();
+	sevenDaysAgo.setDate(today.getDate() - 6);
+
+	const stats = await Order.aggregate([
+		{
+			$match: {
+				createdAt: { $gte: sevenDaysAgo },
+			},
+		},
+		{
+			$group: {
+				_id: {
+					$dateToString: { format: "%Y_%m-%d", date: "$createdAt" },
+				},
+				totalRevenue: { $sum: "$totalPrice" },
+				count: { $sum: 1 },
+			},
+		},
+		{ $sort: { _id: 1 } },
+	]);
+	res.json(stats);
+};
