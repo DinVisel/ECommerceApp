@@ -9,7 +9,7 @@ function TabsLayout() {
 	return (
 		<Tabs screenOptions={{ tabBarActiveTintColor: "tomato" }}>
 			<Tabs.Screen
-				name='products/index'
+				name='products'
 				options={{
 					title: "Home",
 					tabBarIcon: ({ color, size }) => (
@@ -18,16 +18,7 @@ function TabsLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name='products/categories'
-				options={{
-					title: "Categories",
-					tabBarIcon: ({ color, size }) => (
-						<Ionicons name='grid-outline' color={color} size={size} />
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name='cart/index'
+				name='cart'
 				options={{
 					title: "Cart",
 					tabBarIcon: ({ color, size }) => (
@@ -37,7 +28,7 @@ function TabsLayout() {
 			/>
 
 			<Tabs.Screen
-				name='account/index'
+				name='account'
 				options={{
 					title: "Account",
 					tabBarIcon: ({ color, size }) => (
@@ -45,17 +36,6 @@ function TabsLayout() {
 					),
 				}}
 			/>
-
-			{/* Seller Route */}
-			{user?.role === "seller" && (
-				<Tabs.Screen
-					name='(tabs)/seller/add-product'
-					options={{
-						title: "Add Product",
-						tabBarButton: () => null, // hide from bottom tab
-					}}
-				/>
-			)}
 
 			{/* Admin Routes */}
 			{user?.role === "admin" && (

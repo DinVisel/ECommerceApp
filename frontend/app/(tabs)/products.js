@@ -47,7 +47,7 @@ const ProductListScreen = () => {
 			const res = await API.get("/products/categories");
 			setCategories(res.data);
 		} catch (error) {
-			console.error("Kategoriler alınamadı", error);
+			console.error("Products could not fetched", error);
 		}
 	};
 
