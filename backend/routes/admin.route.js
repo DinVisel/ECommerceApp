@@ -13,6 +13,7 @@ import {
 	protect,
 	authorizeRoles,
 	isAdmin,
+	isAuth,
 } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
