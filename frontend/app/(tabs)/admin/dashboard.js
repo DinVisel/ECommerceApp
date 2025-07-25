@@ -15,7 +15,12 @@ import { useRouter } from "expo-router";
 const AdminDashboardScreen = () => {
 	const { user } = useContext(AuthContext);
 	const [loading, setLoading] = useState(true);
-	const [stats, setStats] = useState(null);
+	const [stats, setStats] = useState({
+		topUsers: [],
+		topProducts: [],
+		monthlyRevenue: [],
+		categoryChart: [],
+	});
 	const [graphData, setGraphData] = useState([]);
 	const [topProducts, setTopProducts] = useState([]);
 	const [topUsers, setTopUsers] = useState([]);
