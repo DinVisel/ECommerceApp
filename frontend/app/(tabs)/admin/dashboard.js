@@ -14,7 +14,7 @@ import { useRouter } from "expo-router";
 
 const AdminDashboardScreen = () => {
 	const { user } = useContext(AuthContext);
-	const [loading, setLoading] = useEffect(true);
+	const [loading, setLoading] = useState(true);
 	const [stats, setStats] = useState(null);
 	const [graphData, setGraphData] = useState([]);
 	const [topProducts, setTopProducts] = useState([]);
@@ -184,17 +184,19 @@ const AdminDashboardScreen = () => {
 					title='Top Products'
 					onPress={() => router.push("/admin/topProductsChart")}
 					chartData={{
-						labels: stats.topProducts.map((p) => p.name),
-						datasets: [{ data: stats.topProducts.map((p) => p.totalSales) }],
+						labels: stats?.topProducts?.map((p) => p.name) || [],
+						datasets: [{ data: stats?.topProducts?.map((p) => p.sales) || [] }],
 					}}
 				/>
 				<PreviewCard
 					title='Monthly Revenue'
 					onPress={() => router.push("/admin/monthlyRevenue")}
 					chartData={{
-						labels: stats.monthlyRevenue.map((item) => item.month),
+						labels: stats?.monthlyRevenue?.map((item) => item.month) || [],
 						datasets: [
-							{ data: stats.monthlyRevenue.map((item) => item.revenue) },
+							{
+								data: stats?.monthlyRevenue?.map((item) => item.revenue) || [],
+							},
 						],
 					}}
 				/>
@@ -202,9 +204,9 @@ const AdminDashboardScreen = () => {
 					title='Categories by Product Count'
 					onPress={() => router.push("/admin/categoryChart")}
 					chartData={{
-						labels: stats.categoryChart.map((c) => c.name),
+						labels: stats?.categoryChart?.map((c) => c.name) || [],
 						datasets: [
-							{ data: stats.categoryChart.map((c) => c.productCount) },
+							{ data: stats?.categoryChart?.map((c) => c.productCount) || [] },
 						],
 					}}
 				/>

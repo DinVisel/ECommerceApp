@@ -1,11 +1,11 @@
 import { Tabs } from "expo-router";
-import { AuthProvider, useAuth } from "../../contexts/auth.context.js";
+import { useAuth } from "../../contexts/auth.context.js";
 import { CartProvider } from "../../contexts/cart.context.js";
 import { Ionicons } from "@expo/vector-icons";
 import { ActivityIndicator } from "react-native";
 
 export default function TabsLayout() {
-	const { user } = useAuth();
+	const { user, loading } = useAuth();
 
 	const renderUserTabs = () => (
 		<Tabs screenOptions={{ tabBarActiveTintColor: "tomato" }}>
@@ -73,6 +73,10 @@ export default function TabsLayout() {
 	);
 
 	const renderSellerTabs = () => <></>;
+
+	if (loading) {
+		return <ActivityIndicator style={{ marginTop: 20 }} />;
+	}
 
 	if (!user) {
 		return renderUserTabs();

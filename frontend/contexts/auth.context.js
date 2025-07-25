@@ -6,16 +6,19 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
+	const [loading, setLoading] = useState(true);
 
 	const login = async (token) => {
 		await AsyncStorage.setItem("token", token);
 		const decoded = jwtDecode(token);
 		setUser(decoded);
+		setLoading(false);
 	};
 
 	const logout = async () => {
 		await AsyncStorage.removeItem("token");
 		setUser(null);
+		setLoading(false);
 	};
 
 	const loadUser = async () => {
@@ -28,6 +31,7 @@ export const AuthProvider = ({ children }) => {
 				setUser(null);
 			}
 		}
+		setLoading(false);
 	};
 
 	useEffect(() => {
@@ -40,7 +44,7 @@ export const AuthProvider = ({ children }) => {
 	}, []);*/
 
 	return (
-		<AuthContext.Provider value={{ user, login, logout }}>
+		<AuthContext.Provider value={{ user, login, logout, loading }}>
 			{children}
 		</AuthContext.Provider>
 	);
