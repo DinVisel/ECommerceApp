@@ -69,10 +69,67 @@ export default function TabsLayout() {
 					),
 				}}
 			/>
+			<Tabs.Screen
+				name='products'
+				options={{
+					title: "Home",
+					tabBarIcon: ({ color, size }) => (
+						<Ionicons name='home-outline' color={color} size={size} />
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name='cart'
+				options={{
+					title: "Cart",
+					tabBarIcon: ({ color, size }) => (
+						<Ionicons name='cart-outline' color={color} size={size} />
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name='account'
+				options={{
+					title: "Account",
+					tabBarIcon: ({ color, size }) => (
+						<Ionicons name='person-outline' color={color} size={size} />
+					),
+				}}
+			/>
 		</Tabs>
 	);
 
-	const renderSellerTabs = () => <></>;
+	const renderSellerTabs = () => (
+		<>
+			<Tabs.Screen
+				name='seller/add-product'
+				options={{
+					title: "Ürün Ekle",
+					tabBarIcon: ({ color, size }) => (
+						<Ionicons name='add-circle-outline' color={color} size={size} />
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name='seller/my-products'
+				options={{
+					title: "Ürünlerim",
+					tabBarIcon: ({ color, size }) => (
+						<Ionicons name='cube-outline' color={color} size={size} />
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name='seller/my-orders'
+				options={{
+					title: "Siparişler",
+					tabBarIcon: ({ color, size }) => (
+						<Ionicons name='list-outline' color={color} size={size} />
+					),
+				}}
+			/>
+		</>
+	);
 
 	if (loading) {
 		return <ActivityIndicator style={{ marginTop: 20 }} />;

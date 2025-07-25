@@ -77,17 +77,12 @@ const AdminOrders = () => {
 	);
 
 	return (
-		<>
-			<TouchableOpacity onPress={() => router.back()}>
-				<Ionicons name='arrow-back' size={24} color='black' />
-			</TouchableOpacity>
-			<FlatList
-				data={orders}
-				renderItem={renderItem}
-				keyExtractor={(item) => item._id}
-				contentContainerStyle={{ padding: 10 }}
-			/>
-		</>
+		<FlatList
+			data={orders}
+			renderItem={renderItem}
+			keyExtractor={(item) => item._id}
+			contentContainerStyle={{ padding: 10 }}
+		/>
 	);
 };
 

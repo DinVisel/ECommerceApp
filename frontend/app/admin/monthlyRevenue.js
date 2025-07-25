@@ -6,14 +6,17 @@ import {
 	Dimensions,
 	ScrollView,
 	ActivityIndicator,
+	TouchableOpacity,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import API from "../../services/api.js";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 const MonthlyRevenueScreen = () => {
 	const [revenue, setRevenue] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const router = useRouter();
 
 	useEffect(() => {
 		const loadRevenue = async () => {

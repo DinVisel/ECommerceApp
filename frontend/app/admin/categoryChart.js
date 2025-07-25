@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Dimensions } from "react-native";
+import { View, Text, Dimensions, TouchableOpacity } from "react-native";
 import { PieChart } from "react-native-chart-kit";
 import API from "../../services/api.js";
 import { useAuth } from "../../contexts/auth.context.js";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -11,6 +12,7 @@ export default function CategoryChart() {
 	const { user } = useAuth();
 	const [data, setData] = useState();
 	const headers = { Authorization: `Bearer ${user.token}` };
+	const router = useRouter();
 
 	useEffect(() => {
 		API.get("/admin/dashboard/category-sales", { headers }).then((res) => {

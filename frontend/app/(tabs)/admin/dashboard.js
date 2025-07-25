@@ -116,9 +116,6 @@ const AdminDashboardScreen = () => {
 	}
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
-			<TouchableOpacity onPress={() => router.back()}>
-				<Ionicons name='arrow-back' size={24} color='black' />
-			</TouchableOpacity>
 			<Text style={styles.title}>Admin Dashboard</Text>
 			<View style={styles.card}>
 				<Text style={styles.label}>Users</Text>

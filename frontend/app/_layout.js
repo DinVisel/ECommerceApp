@@ -1,12 +1,20 @@
+import { Stack } from "expo-router";
 import { Slot } from "expo-router";
-import { AuthProvider } from "../contexts/auth.context.js";
-import { CartProvider } from "../contexts/cart.context.js";
+import { AuthProvider } from "../contexts/auth.context";
+import { CartProvider } from "../contexts/cart.context";
 
 export default function RootLayout() {
 	return (
 		<AuthProvider>
 			<CartProvider>
-				<Slot />
+				<Stack
+					screenOptions={{
+						gestureEnabled: true,
+						animation: "slide_from_right", // iOS benzeri geçiş
+					}}
+				>
+					<Slot />
+				</Stack>
 			</CartProvider>
 		</AuthProvider>
 	);
