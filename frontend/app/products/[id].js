@@ -11,6 +11,7 @@ import {
 import { useLocalSearchParams } from "expo-router";
 import API from "../../services/api.js";
 import { CartContext } from "../../contexts/cart.context.js";
+import { Ionicons } from "@expo/vector-icons";
 
 const ProductDetail = () => {
 	const { id } = useLocalSearchParams();
@@ -40,6 +41,9 @@ const ProductDetail = () => {
 
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
+			<TouchableOpacity onPress={() => router.back()}>
+				<Ionicons name='arrow-back' size={24} color='black' />
+			</TouchableOpacity>
 			<Image
 				source={{
 					uri: product.image || "https://via.placeholder.com/300x300?text=Yok",

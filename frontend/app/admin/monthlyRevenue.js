@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import API from "../../services/api.js";
+import { Ionicons } from "@expo/vector-icons";
 
 const MonthlyRevenueScreen = () => {
 	const [revenue, setRevenue] = useState([]);
@@ -36,6 +37,9 @@ const MonthlyRevenueScreen = () => {
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
 			<Text style={styles.title}>Monthly Revenue</Text>
+			<TouchableOpacity onPress={() => router.back()}>
+				<Ionicons name='arrow-back' size={24} color='black' />
+			</TouchableOpacity>
 			<LineChart
 				data={{
 					labels: revenue.map((item) => item.month),

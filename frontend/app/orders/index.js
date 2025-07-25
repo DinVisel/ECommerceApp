@@ -10,6 +10,7 @@ import {
 import API from "../../services/api";
 import { useRouter } from "expo-router";
 import { AuthContext } from "../../contexts/auth.context";
+import { Ionicons } from "@expo/vector-icons";
 
 const MyOrdersScreen = () => {
 	const [orders, setOrders] = useState([]);
@@ -63,12 +64,17 @@ const MyOrdersScreen = () => {
 	);
 
 	return (
-		<FlatList
-			data={orders}
-			renderItem={renderItem}
-			keyExtractor={(item) => item._id}
-			contentContainerStyle={{ padding: 10 }}
-		/>
+		<>
+			<TouchableOpacity onPress={() => router.back()}>
+				<Ionicons name='arrow-back' size={24} color='black' />
+			</TouchableOpacity>
+			<FlatList
+				data={orders}
+				renderItem={renderItem}
+				keyExtractor={(item) => item._id}
+				contentContainerStyle={{ padding: 10 }}
+			/>
+		</>
 	);
 };
 

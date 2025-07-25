@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Button, Alert, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import API from "../services/api";
+import { Ionicons } from "@expo/vector-icons";
 
 const RegisterScreen = () => {
 	const router = useRouter();
@@ -29,6 +30,9 @@ const RegisterScreen = () => {
 
 	return (
 		<View style={styles.container}>
+			<TouchableOpacity onPress={() => router.back()}>
+				<Ionicons name='arrow-back' size={24} color='black' />
+			</TouchableOpacity>
 			<Text style={styles.title}>Kayıt Ol</Text>
 
 			<TextInput

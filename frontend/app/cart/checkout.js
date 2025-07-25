@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { CartContext } from "../../contexts/cart.context";
 import API from "../../services/api";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 const CheckoutScreen = () => {
 	const { cartItems, clearCart } = useContext(CartContext);
@@ -39,6 +40,9 @@ const CheckoutScreen = () => {
 
 	return (
 		<View style={styles.container}>
+			<TouchableOpacity onPress={() => router.back()}>
+				<Ionicons name='arrow-back' size={24} color='black' />
+			</TouchableOpacity>
 			<Text style={styles.label}>Shipping Address</Text>
 			<TextInput
 				style={styles.input}

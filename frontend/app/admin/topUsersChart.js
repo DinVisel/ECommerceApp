@@ -3,6 +3,7 @@ import { View, Text, Dimensions } from "react-native";
 import { BarChart } from "react-native-chart-kit";
 import API from "../../services/api.js";
 import { useAuth } from "../../contexts/auth.context.js";
+import { Ionicons } from "@expo/vector-icons";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -39,6 +40,9 @@ export default function TopUsersChart() {
 			<Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>
 				Top Customers (Order Count)
 			</Text>
+			<TouchableOpacity onPress={() => router.back()}>
+				<Ionicons name='arrow-back' size={24} color='black' />
+			</TouchableOpacity>
 
 			<BarChart
 				data={chartData}

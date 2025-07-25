@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, Alert, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import API from "../services/api";
 import { AuthContext } from "../contexts/auth.context.js";
+import { Ionicons } from "@expo/vector-icons";
 
 const LoginScreen = () => {
 	const router = useRouter();
@@ -35,6 +36,9 @@ const LoginScreen = () => {
 
 	return (
 		<View style={styles.container}>
+			<TouchableOpacity onPress={() => router.back()}>
+				<Ionicons name='arrow-back' size={24} color='black' />
+			</TouchableOpacity>
 			<Text style={styles.title}>Login</Text>
 
 			<TextInput

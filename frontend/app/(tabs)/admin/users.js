@@ -11,6 +11,7 @@ import {
 import { AuthContext } from "../../../contexts/auth.context";
 import API from "../../../services/api";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function AdminUsers() {
 	const { user } = useContext(AuthContext);
@@ -107,26 +108,31 @@ export default function AdminUsers() {
 		return <ActivityIndicator size='large' style={{ marginTop: 40 }} />;
 
 	return (
-		<FlatList
-			data={users}
-			keyExtractor={(item) => item._id}
-			contentContainerStyle={{ padding: 15 }}
-			renderItem={({ item }) => (
-				<View style={styles.card}>
-					<Text style={styles.name}>{item.name}</Text>
-					<Text>Email: {item.email}</Text>
-					<Text>Rol: {item.role}</Text>
-					<Text>Kayıt: {new Date(item.createdAt).toLocaleDateString()}</Text>
-					<TouchableOpacity onPress={() => handleRoleChange(item)}>
-						<Text style={styles.roleButton}>🔄 Rolü Değiştir</Text>
-					</TouchableOpacity>
+		<>
+			<TouchableOpacity onPress={() => router.back()}>
+				<Ionicons name='arrow-back' size={24} color='black' />
+			</TouchableOpacity>
+			<FlatList
+				data={users}
+				keyExtractor={(item) => item._id}
+				contentContainerStyle={{ padding: 15 }}
+				renderItem={({ item }) => (
+					<View style={styles.card}>
+						<Text style={styles.name}>{item.name}</Text>
+						<Text>Email: {item.email}</Text>
+						<Text>Rol: {item.role}</Text>
+						<Text>Kayıt: {new Date(item.createdAt).toLocaleDateString()}</Text>
+						<TouchableOpacity onPress={() => handleRoleChange(item)}>
+							<Text style={styles.roleButton}>🔄 Rolü Değiştir</Text>
+						</TouchableOpacity>
 
-					<TouchableOpacity onPress={() => handleDelete(item._id)}>
-						<Text style={styles.deleteButton}>🗑️ Sil</Text>
-					</TouchableOpacity>
-				</View>
-			)}
-		/>
+						<TouchableOpacity onPress={() => handleDelete(item._id)}>
+							<Text style={styles.deleteButton}>🗑️ Sil</Text>
+						</TouchableOpacity>
+					</View>
+				)}
+			/>
+		</>
 	);
 }
 

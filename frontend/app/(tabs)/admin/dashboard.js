@@ -11,6 +11,7 @@ import API from "../../../services/api.js";
 import { LineChart } from "react-native-chart-kit";
 import { Dimensions, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 const AdminDashboardScreen = () => {
 	const { user } = useContext(AuthContext);
@@ -26,6 +27,10 @@ const AdminDashboardScreen = () => {
 	const [topUsers, setTopUsers] = useState([]);
 	const [categoryStats, setCategoryStats] = useState([]);
 	const headers = { Authorization: `Bearer ${user.token}` };
+	const router = useRouter();
+
+	const safeData = (arr) =>
+		(arr || []).map((x) => (Number.isFinite(x) ? x : 0));
 
 	const loadGraphData = async () => {
 		try {
@@ -44,7 +49,7 @@ const AdminDashboardScreen = () => {
 				headers: { Authorization: `Bearer ${user.token}` },
 			});
 
-			setStats(res.data);
+			setStats((prev) => ({ ...prev, ...res.data }));
 		} catch (error) {
 			console.error("Dashboard load error", error);
 		} finally {
@@ -96,7 +101,7 @@ const AdminDashboardScreen = () => {
 			loadGraphData();
 			loadExtraStats();
 		}
-	}, []);
+	}, [user]);
 
 	if (loading) {
 		return <ActivityIndicator size='large' style={{ marginTop: 40 }} />;
@@ -111,6 +116,9 @@ const AdminDashboardScreen = () => {
 	}
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
+			<TouchableOpacity onPress={() => router.back()}>
+				<Ionicons name='arrow-back' size={24} color='black' />
+			</TouchableOpacity>
 			<Text style={styles.title}>Admin Dashboard</Text>
 			<View style={styles.card}>
 				<Text style={styles.label}>Users</Text>
@@ -135,7 +143,9 @@ const AdminDashboardScreen = () => {
 				<LineChart
 					data={{
 						labels: graphData.map((item) => item._id.slice(5)), // "MM-DD"
-						datasets: [{ data: graphData.map((item) => item.totalRevenue) }],
+						datasets: [
+							{ data: safeData(graphData.map((item) => item.totalRevenue)) },
+						],
 					}}
 					width={Dimensions.get("window").width - 40}
 					height={220}
@@ -189,8 +199,12 @@ const AdminDashboardScreen = () => {
 					title='Top Products'
 					onPress={() => router.push("/admin/topProductsChart")}
 					chartData={{
-						labels: stats?.topProducts?.map((p) => p.name) || [],
-						datasets: [{ data: stats?.topProducts?.map((p) => p.sales) || [] }],
+						labels: topProducts.map((p) => p.name || p._id),
+						datasets: [
+							{
+								data: safeData(topProducts.map((p) => p.totalSold || p.sales)),
+							},
+						],
 					}}
 				/>
 				<PreviewCard
@@ -200,7 +214,10 @@ const AdminDashboardScreen = () => {
 						labels: stats?.monthlyRevenue?.map((item) => item.month) || [],
 						datasets: [
 							{
-								data: stats?.monthlyRevenue?.map((item) => item.revenue) || [],
+								data:
+									safeData(
+										stats?.monthlyRevenue?.map((item) => item.revenue)
+									) || [],
 							},
 						],
 					}}
@@ -209,9 +226,13 @@ const AdminDashboardScreen = () => {
 					title='Categories by Product Count'
 					onPress={() => router.push("/admin/categoryChart")}
 					chartData={{
-						labels: stats?.categoryChart?.map((c) => c.name) || [],
+						labels: categoryStats.map((c) => c._id || c.name),
 						datasets: [
-							{ data: stats?.categoryChart?.map((c) => c.productCount) || [] },
+							{
+								data: safeData(
+									categoryStats.map((c) => c.totalSold || c.productCount)
+								),
+							},
 						],
 					}}
 				/>
@@ -220,8 +241,14 @@ const AdminDashboardScreen = () => {
 					title='Top Users by Order Count'
 					onPress={() => router.push("/admin/topUsersChart")}
 					chartData={{
-						labels: stats.topUsers.map((u) => u.name),
-						datasets: [{ data: stats.topUsers.map((u) => u.totalOrders) }],
+						labels: topUsers.map((u) => u.name),
+						datasets: [
+							{
+								data: safeData(
+									topUsers.map((u) => u.orderCount || u.totalOrders)
+								),
+							},
+						],
 					}}
 				/>
 			</View>

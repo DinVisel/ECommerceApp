@@ -11,6 +11,7 @@ import {
 import { AuthContext } from "../../../contexts/auth.context.js";
 import API from "../../../services/api.js";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 const AdminOrders = () => {
 	const { user } = useContext(AuthContext);
@@ -76,12 +77,17 @@ const AdminOrders = () => {
 	);
 
 	return (
-		<FlatList
-			data={orders}
-			renderItem={renderItem}
-			keyExtractor={(item) => item._id}
-			contentContainerStyle={{ padding: 10 }}
-		/>
+		<>
+			<TouchableOpacity onPress={() => router.back()}>
+				<Ionicons name='arrow-back' size={24} color='black' />
+			</TouchableOpacity>
+			<FlatList
+				data={orders}
+				renderItem={renderItem}
+				keyExtractor={(item) => item._id}
+				contentContainerStyle={{ padding: 10 }}
+			/>
+		</>
 	);
 };
 
