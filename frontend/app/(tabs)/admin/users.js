@@ -8,8 +8,8 @@ import {
 	Alert,
 	TouchableOpacity,
 } from "react-native";
-import { AuthContext } from "../../contexts/auth.context";
-import API from "../../services/api";
+import { AuthContext } from "../../../contexts/auth.context";
+import API from "../../../services/api";
 import { useRouter } from "expo-router";
 
 export default function AdminUsers() {

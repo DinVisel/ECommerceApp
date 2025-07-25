@@ -6,8 +6,8 @@ import {
 	ActivityIndicator,
 	ScrollView,
 } from "react-native";
-import { AuthContext } from "../../contexts/auth.context.js";
-import API from "../../services/api.js";
+import { AuthContext } from "../../../contexts/auth.context.js";
+import API from "../../../services/api.js";
 import { LineChart } from "react-native-chart-kit";
 import { Dimensions, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
