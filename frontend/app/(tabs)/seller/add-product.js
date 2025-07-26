@@ -1,5 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
-import { View, Text, TextInput, Button, Alert, StyleSheet } from "react-native";
+import {
+	View,
+	Text,
+	TextInput,
+	Button,
+	Alert,
+	StyleSheet,
+	TouchableOpacity,
+} from "react-native";
 import { AuthContext } from "../../../contexts/auth.context.js";
 import API from "../../../services/api.js";
 import { useRouter } from "expo-router";
