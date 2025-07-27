@@ -1,20 +1,33 @@
-import React from "react";
-import { View, Text, Button, StyleSheet, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Button, StyleSheet, Alert, TextInput } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "../../contexts/auth.context.js";
 import API from "../../services/api.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AccountScreen() {
 	const router = useRouter();
 	const { user, logout } = useAuth();
 
+	const [name, setName] = useState("");
+	const [email, setEmail] = useState("");
+
+	useEffect(() => {
+		if (user) {
+			setName(user.name);
+			setEmail(user.email);
+		}
+	}, [user]);
+
 	const handleSave = async () => {
-		const updateUser = (id, userData, token) => {
-			API.put(`/users/${id}`, userData, {
+		const updateUser = async (id, userData, token) => {
+			return API.put(`/users/${id}`, userData, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 		};
+
 		try {
+			const token = await AsyncStorage.getItem("token");
 			await updateUser(user._id, { name, email }, token);
 			Alert.alert("Profile updated!");
 		} catch (error) {
@@ -36,8 +49,21 @@ export default function AccountScreen() {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Welcome, {user.name}</Text>
-			<Text>Email: {user.email}</Text>
-			<Text>Role: {user.role}</Text>
+			<TextInput
+				placeholder='Name'
+				value={name}
+				onChangeText={setName}
+				style={styles.input}
+			/>
+			<TextInput
+				placeholder='Email'
+				value={email}
+				onChangeText={setEmail}
+				style={styles.input}
+				keyboardType='email-address'
+				autoCapitalize='none'
+			/>
+			<Button title='Save' onPress={handleSave} />
 
 			<View style={styles.buttonContainer}>
 				<Button title='Logout' onPress={logout} color='red' />
@@ -49,6 +75,14 @@ export default function AccountScreen() {
 const styles = StyleSheet.create({
 	container: { flex: 1, justifyContent: "center", alignItems: "center" },
 	title: { fontSize: 20, marginBottom: 20 },
+	input: {
+		borderWidth: 1,
+		borderColor: "#ccc",
+		borderRadius: 6,
+		padding: 10,
+		marginBottom: 16,
+		width: "80%",
+	},
 	buttonContainer: {
 		marginTop: 20,
 	},

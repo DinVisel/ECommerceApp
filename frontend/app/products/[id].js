@@ -17,14 +17,14 @@ export default function ProductDetailScreen() {
 	const { id } = useLocalSearchParams();
 	const router = useRouter();
 
-	const [product, setProdcut] = useState([]);
+	const [product, setProduct] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [editing, setEditing] = useState(false);
 
 	const fetchProduct = async () => {
 		try {
-			const res = API.get(`/products/${id}`);
-			setProdcut(res.data);
+			const res = await API.get(`/products/${id}`);
+			setProduct(res.data);
 		} catch (error) {
 			console.error("Could not fetched product data", error);
 		} finally {
@@ -62,7 +62,7 @@ export default function ProductDetailScreen() {
 
 	const handleUpdate = async () => {
 		try {
-			await axios.put(`https://your-api.com/products/${id}`, product);
+			await API.put(`/products/${id}`, product);
 			Alert.alert("Başarılı", "Ürün güncellendi.");
 			setEditing(false);
 		} catch (err) {
@@ -82,7 +82,7 @@ export default function ProductDetailScreen() {
 			<ScrollView contentContainerStyle={styles.container}>
 				<Text style={styles.title}>{product.name}</Text>
 				<Text style={styles.label}>Fiyat: {product.price} ₺</Text>
-				<Text style={styles.label}>Stok: {product.stock}</Text>
+				<Text style={styles.label}>Stok: {product.countInStock}</Text>
 				<Text style={styles.label}>Açıklama:</Text>
 				<Text style={styles.description}>{product.description}</Text>
 
@@ -114,10 +114,10 @@ export default function ProductDetailScreen() {
 						<Text>Stok</Text>
 						<TextInput
 							style={styles.input}
-							value={String(product.stock)}
+							value={String(product.countInStock)}
 							keyboardType='numeric'
 							onChangeText={(text) =>
-								setProduct({ ...product, stock: parseInt(text) })
+								setProduct({ ...product, countInStock: parseInt(text) })
 							}
 						/>
 						<Text>Açıklama</Text>

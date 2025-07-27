@@ -3,6 +3,7 @@ import {
 	registerUser,
 	loginUser,
 	updateUserRole,
+	updateUser,
 } from "../controllers/user.controller.js";
 import { protect, isAdmin } from "../middlewares/auth.middleware.js";
 

@@ -3,8 +3,8 @@ import Order from "../models/order.model.js";
 export const createOrder = async (req, res) => {
 	const { orderItems, shippingAddress, paymentMethod, totalPrice } = req.body;
 
-	if (!orderItems || orderItems.lenght === 0)
-		return res.status(400).json({ message: "Order cannot be emty" });
+	if (!orderItems || orderItems.length === 0)
+		return res.status(400).json({ message: "Order cannot be empty" });
 
 	try {
 		const order = new Order({

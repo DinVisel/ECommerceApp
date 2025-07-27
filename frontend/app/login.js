@@ -1,5 +1,13 @@
 import React, { useState, useContext } from "react";
-import { View, Text, TextInput, Button, Alert, StyleSheet } from "react-native";
+import {
+	View,
+	Text,
+	TextInput,
+	Button,
+	Alert,
+	StyleSheet,
+	TouchableOpacity,
+} from "react-native";
 import { useRouter } from "expo-router";
 import API from "../services/api";
 import { AuthContext } from "../contexts/auth.context.js";
