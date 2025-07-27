@@ -1,5 +1,13 @@
 import React, { useContext, useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import {
+	View,
+	Text,
+	TextInput,
+	Button,
+	StyleSheet,
+	Alert,
+	TouchableOpacity,
+} from "react-native";
 import { CartContext } from "../../contexts/cart.context";
 import API from "../../services/api";
 import { useRouter } from "expo-router";

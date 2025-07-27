@@ -30,10 +30,10 @@ const LoginScreen = () => {
 				password: form.password,
 			});
 
-			const token = res.data.token;
-			await login(token); // burası context'i güncelliyor
+			const { token, user: userData } = res.data;
+			await login(token, userData);
 
-			router.replace("/"); // Ana sayfaya yönlendir
+			router.replace("/");
 		} catch (err) {
 			Alert.alert(
 				"Giriş Başarısız",

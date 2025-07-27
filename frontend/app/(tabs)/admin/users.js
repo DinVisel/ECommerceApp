@@ -20,7 +20,7 @@ export default function AdminUsers() {
 	const [loading, setLoading] = useState(true);
 
 	const handleDelete = async (userId) => {
-		if (userId === user._id) {
+		if (userId === user.id) {
 			Alert.alert("Error", "You cannot delete your own account!");
 			return;
 		}

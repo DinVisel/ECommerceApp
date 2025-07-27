@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useAuth } from "../../../contexts/auth.context";
 import { useRouter } from "expo-router";
-import axios from "axios";
+import API from "../../../services/api.js";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function MyProductsScreen() {
@@ -19,9 +19,7 @@ export default function MyProductsScreen() {
 
 	const fetchSellerProducts = async () => {
 		try {
-			const res = await axios.get(
-				`https://your-api.com/products?sellerId=${user.id}`
-			);
+			const res = await API.get(`/products?sellerId=${user.id}`);
 			setProducts(res.data);
 		} catch (err) {
 			console.error("Ürünler alınırken hata:", err.message);

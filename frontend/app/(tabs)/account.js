@@ -27,8 +27,7 @@ export default function AccountScreen() {
 		};
 
 		try {
-			const token = await AsyncStorage.getItem("token");
-			await updateUser(user._id, { name, email }, token);
+			await updateUser(user.id, { name, email }, user.token);
 			Alert.alert("Profile updated!");
 		} catch (error) {
 			console.error("Update error", error);
