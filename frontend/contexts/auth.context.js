@@ -38,11 +38,6 @@ export const AuthProvider = ({ children }) => {
 		loadUser();
 	}, []);
 
-	/*useEffect(() => {
-		// Geliştirme kolaylığı için direkt kullanıcı set ediliyor
-		setUser({ name: "Test Kullanıcı", role: "admin" }); // veya "user"
-	}, []);*/
-
 	return (
 		<AuthContext.Provider value={{ user, login, logout, loading }}>
 			{children}

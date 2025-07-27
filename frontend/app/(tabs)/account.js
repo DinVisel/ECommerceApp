@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "../../contexts/auth.context.js";
 import API from "../../services/api.js";
@@ -7,6 +7,21 @@ import API from "../../services/api.js";
 export default function AccountScreen() {
 	const router = useRouter();
 	const { user, logout } = useAuth();
+
+	const handleSave = async () => {
+		const updateUser = (id, userData, token) => {
+			API.put(`/users/${id}`, userData, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+		};
+		try {
+			await updateUser(user._id, { name, email }, token);
+			Alert.alert("Profile updated!");
+		} catch (error) {
+			console.error("Update error", error);
+			Alert.alert("Error on Update");
+		}
+	};
 
 	if (!user) {
 		return (
