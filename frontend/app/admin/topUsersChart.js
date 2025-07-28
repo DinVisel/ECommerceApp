@@ -16,6 +16,10 @@ export default function TopUsersChart() {
 	});
 	const router = useRouter();
 
+	if (user?.role !== "admin") {
+		return <Text>Acces Denied!</Text>;
+	}
+
 	useEffect(() => {
 		API.get("/admin/dashboard/top-users", {
 			headers: { Authorization: `Bearer ${user.token}` },

@@ -56,6 +56,37 @@ export default function AccountScreen() {
 			<View style={styles.buttonContainer}>
 				<Button title='Logout' onPress={logout} color='red' />
 			</View>
+			{user?.role === "admin" && (
+				<>
+					<Text style={styles.section}>🔒 Admin Panel</Text>
+					<Button
+						title='Dashboard'
+						onPress={() => router.push("/admin/dashboard")}
+					/>
+					<Button
+						title='Manage Users'
+						onPress={() => router.push("/admin/users")}
+					/>
+					<Button
+						title='View Orders'
+						onPress={() => router.push("/admin/orders")}
+					/>
+				</>
+			)}
+
+			{user?.role === "seller" && (
+				<>
+					<Text style={styles.section}>📦 Seller Panel</Text>
+					<Button
+						title='My Products'
+						onPress={() => router.push("/seller/my-products")}
+					/>
+					<Button
+						title='Orders'
+						onPress={() => router.push("/seller/my-orders")}
+					/>
+				</>
+			)}
 		</View>
 	);
 }

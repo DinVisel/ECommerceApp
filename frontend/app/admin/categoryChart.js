@@ -28,6 +28,10 @@ export default function CategoryChart() {
 		});
 	}, []);
 
+	if (user?.role !== "admin") {
+		return <Text>Acces Denied!</Text>;
+	}
+
 	return (
 		<View style={{ padding: 15 }}>
 			<TouchableOpacity onPress={() => router.back()}>

@@ -95,6 +95,10 @@ const AdminDashboardScreen = () => {
 		</TouchableOpacity>
 	);
 
+	if (user?.role !== "admin") {
+		return <Text>Acces Denied!</Text>;
+	}
+
 	useEffect(() => {
 		if (user?.role === "admin") {
 			loadDashboard();

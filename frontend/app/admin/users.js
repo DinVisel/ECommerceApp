@@ -100,6 +100,11 @@ export default function AdminUsers() {
 			setLoading(false);
 		}
 	};
+
+	if (user?.role !== "admin") {
+		return <Text>Acces Denied!</Text>;
+	}
+
 	useEffect(() => {
 		fetchUsers();
 	}, []);

@@ -18,6 +18,10 @@ const MonthlyRevenueScreen = () => {
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
 
+	if (user?.role !== "admin") {
+		return <Text>Acces Denied!</Text>;
+	}
+
 	useEffect(() => {
 		const loadRevenue = async () => {
 			try {
