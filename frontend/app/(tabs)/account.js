@@ -48,21 +48,10 @@ export default function AccountScreen() {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Welcome, {user.name}</Text>
-			<TextInput
-				placeholder='Name'
-				value={name}
-				onChangeText={setName}
-				style={styles.input}
+			<Button
+				title='Profili Düzenle'
+				onPress={() => router.push("/account/edit-profile")}
 			/>
-			<TextInput
-				placeholder='Email'
-				value={email}
-				onChangeText={setEmail}
-				style={styles.input}
-				keyboardType='email-address'
-				autoCapitalize='none'
-			/>
-			<Button title='Save' onPress={handleSave} />
 
 			<View style={styles.buttonContainer}>
 				<Button title='Logout' onPress={logout} color='red' />

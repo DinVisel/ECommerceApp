@@ -11,7 +11,12 @@ export default function TabsLayout() {
 	}
 
 	return (
-		<Tabs screenOptions={{ tabBarActiveTintColor: "tomato" }}>
+		<Tabs
+			screenOptions={{
+				tabBarActiveTintColor: "tomato",
+				headerShown: false,
+			}}
+		>
 			<Tabs.Screen
 				name='products'
 				options={{

@@ -7,35 +7,36 @@ import {
 	TouchableOpacity,
 	ActivityIndicator,
 } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import API from "../../services/api.js";
-import { useRouter } from "expo-router";
 
-export default function CategoriesScreen() {
-	const [categories, setCategories] = useState([]);
-	const [loading, setLoading] = useState(true);
+export default function CategoryProductsScreen() {
+	const { name } = useLocalSearchParams();
 	const router = useRouter();
+	const [products, setProducts] = useState([]);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		const fetchCategories = async () => {
+		const fetchProducts = async () => {
 			try {
-				const res = await API.get("/products/categories");
-				setCategories(res.data);
+				const res = await API.get("/products", { params: { category: name } });
+				setProducts(res.data);
 			} catch (err) {
-				console.error("Failed to load categories", err);
+				console.error("Failed to load products for category", err);
 			} finally {
 				setLoading(false);
 			}
 		};
-
-		fetchCategories();
-	}, []);
+		fetchProducts();
+	}, [name]);
 
 	const renderItem = ({ item }) => (
 		<TouchableOpacity
 			style={styles.card}
-			onPress={() => router.push(`/categories/${encodeURIComponent(item)}`)}
+			onPress={() => router.push(`/products/${item._id}`)}
 		>
-			<Text style={styles.name}>{item}</Text>
+			<Text style={styles.name}>{item.name}</Text>
+			<Text>{item.price}₺</Text>
 		</TouchableOpacity>
 	);
 
@@ -43,19 +44,19 @@ export default function CategoriesScreen() {
 		return <ActivityIndicator size='large' style={{ marginTop: 30 }} />;
 	}
 
-	if (categories.length === 0) {
+	if (products.length === 0) {
 		return (
 			<View style={styles.center}>
-				<Text>No categories found</Text>
+				<Text>No products found.</Text>
 			</View>
 		);
 	}
 
 	return (
 		<FlatList
-			data={categories}
+			data={products}
 			renderItem={renderItem}
-			keyExtractor={(item) => item}
+			keyExtractor={(item) => item._id}
 			contentContainerStyle={{ padding: 10 }}
 		/>
 	);
@@ -70,5 +71,5 @@ const styles = StyleSheet.create({
 		elevation: 2,
 		marginBottom: 12,
 	},
-	name: { fontWeight: "bold", fontSize: 16 },
+	name: { fontWeight: "bold", fontSize: 16, marginBottom: 4 },
 });
