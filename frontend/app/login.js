@@ -31,7 +31,7 @@ const LoginScreen = () => {
 			});
 
 			const { token, user: userData } = res.data;
-			await login(token, userData);
+			await login({ token, user: userData });
 
 			router.replace("/");
 		} catch (err) {
