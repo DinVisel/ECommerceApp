@@ -8,8 +8,8 @@ import {
 	StyleSheet,
 	TouchableOpacity,
 } from "react-native";
-import { AuthContext } from "../../../contexts/auth.context.js";
-import API from "../../../services/api.js";
+import { AuthContext } from "../../contexts/auth.context.js";
+import API from "../../services/api.js";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 

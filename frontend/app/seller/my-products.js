@@ -6,9 +6,9 @@ import {
 	StyleSheet,
 	TouchableOpacity,
 } from "react-native";
-import { useAuth } from "../../../contexts/auth.context";
+import { useAuth } from "../../contexts/auth.context.js";
 import { useRouter } from "expo-router";
-import API from "../../../services/api.js";
+import API from "../../services/api.js";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function MyProductsScreen() {
