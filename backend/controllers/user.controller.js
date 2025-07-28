@@ -74,7 +74,6 @@ export const updateUserRole = async (req, res) => {
 
 	const newRole = req.body.role;
 
-	// Geçerli rol mü?
 	const validRoles = ["user", "seller", "admin"];
 	if (!validRoles.includes(newRole)) {
 		return res.status(400).json({ message: "Geçersiz rol" });

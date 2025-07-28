@@ -28,6 +28,10 @@ export default function MyProductsScreen() {
 		}
 	};
 
+	if (user?.role !== "seller") {
+		return <Text>Acces Denied!</Text>;
+	}
+
 	useEffect(() => {
 		fetchSellerProducts();
 	}, []);

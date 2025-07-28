@@ -52,6 +52,10 @@ const AddProductScreen = () => {
 		}
 	};
 
+	if (user?.role !== "seller") {
+		return <Text>Acces Denied!</Text>;
+	}
+
 	useEffect(() => {
 		if (!user || (user.role !== "seller" && user.role !== "admin")) {
 			Alert.alert("Unauthorized", "This page is only for sellers.");
