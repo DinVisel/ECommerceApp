@@ -13,6 +13,8 @@ import {
 } from "react-native";
 import API from "../../services/api.js";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "../../contexts/auth.context.js";
 
 const ProductListScreen = () => {
 	const [products, setProducts] = useState([]);
@@ -23,6 +25,7 @@ const ProductListScreen = () => {
 	const [minPrice, setMinPrice] = useState("");
 	const [maxPrice, setMaxPrice] = useState("");
 	const [categories, setCategories] = useState([]);
+	const [isFavorited, setIsFavorited] = useState(false);
 
 	const loadProducts = async () => {
 		try {
@@ -59,9 +62,62 @@ const ProductListScreen = () => {
 		loadProducts();
 	};
 
+	const addToFavorites = (userId, productId, token) => {
+		API.post(
+			`/users/${userId}/favorites`,
+			{ productId },
+			{
+				headers: { Authorization: `Bearer ${token}` },
+			}
+		);
+	};
+
+	const removeFromFavorites = (userId, productId, token) => {
+		API.delete(
+			`/users/${userId}/favorites`,
+			{ productId },
+			{
+				headers: { Authorization: `Bearer ${token}` },
+			}
+		);
+	};
+
+	const getFavorites = (userId, token) => {
+		API.get(`/users/${userId}/favorites`, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+	};
+
+	const checkFavorites = async () => {
+		try {
+			const res = await getFavorites(user._id, user.token);
+			const favorited = res.data.some((p) => p._id === product._id);
+			setIsFavorited(favorited);
+		} catch (err) {
+			console.log("Favori kontrol hatası:", err.message);
+		}
+	};
+
+	const handleFavoriteToggle = async () => {
+		try {
+			if (isFavorited) {
+				await removeFromFavorites(user._id, product._id, user.token);
+				setIsFavorited(false);
+			} else {
+				await addToFavorites(user._id, product._id, user.token);
+				setIsFavorited(true);
+			}
+		} catch (err) {
+			alert(
+				"Favori işlemi başarısız: " + err.response?.data?.message || err.message
+			);
+		}
+	};
+
 	useEffect(() => {
 		loadProducts();
 		fetchCategories();
+		checkFavorites();
 	}, []);
 
 	if (loading) {
@@ -77,22 +133,32 @@ const ProductListScreen = () => {
 	}
 
 	const renderItem = ({ item }) => (
-		<TouchableOpacity
-			style={[styles.card, { opacity: item.countInStock === 0 ? 0.5 : 1 }]}
-			onPress={() => router.push(`/products/${item._id}`)}
-		>
-			<Image
-				source={{
-					uri: item.image || "https://via.placeholder.com/80x80?text=Yok",
-				}}
-				style={styles.image}
-			/>
-			<View>
-				<Text style={styles.name}>{item.name}</Text>
-				<Text>{item.price}₺</Text>
-				<Text style={{ color: "#666" }}>{item.countInStock} adet stokta</Text>
-			</View>
-		</TouchableOpacity>
+		<>
+			<TouchableOpacity onPress={handleFavoriteToggle}>
+				<Ionicons
+					name={isFavorited ? "heart" : "heart-outline"}
+					size={24}
+					color='tomato'
+				/>
+			</TouchableOpacity>
+
+			<TouchableOpacity
+				style={[styles.card, { opacity: item.countInStock === 0 ? 0.5 : 1 }]}
+				onPress={() => router.push(`/products/${item._id}`)}
+			>
+				<Image
+					source={{
+						uri: item.image || "https://via.placeholder.com/80x80?text=Yok",
+					}}
+					style={styles.image}
+				/>
+				<View>
+					<Text style={styles.name}>{item.name}</Text>
+					<Text>{item.price}₺</Text>
+					<Text style={{ color: "#666" }}>{item.countInStock} adet stokta</Text>
+				</View>
+			</TouchableOpacity>
+		</>
 	);
 
 	return (

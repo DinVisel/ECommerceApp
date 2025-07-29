@@ -106,3 +106,59 @@ export const updateUser = async (req, res) => {
 		res.status(500).json({ message: "User update failed" });
 	}
 };
+
+export const getFavorites = async (req, res) => {
+	try {
+		const user = await User.findById(req.params.id);
+		if (!user) {
+			return res.status(404).json({ message: "User Not Found" });
+		}
+		await user.populate("favorites");
+		res.status(200).json(user.favorites);
+	} catch (error) {
+		res.status(500).json({ message: "Fetching failed" });
+	}
+};
+
+export const addFavorites = async (req, res) => {
+	try {
+		const productId = req.body.productId;
+		const user = await User.findById(req.params.id);
+
+		if (!user) return res.status(404).json({ message: "User Not Found" });
+
+		if (!productId) {
+			return res.status(400).json({ message: "Missing product ID" });
+		}
+
+		if (!user.favorites.includes(productId)) {
+			user.favorites.push(productId);
+			await user.save();
+			res.json({ message: "Product added to favorites" });
+		} else {
+			return res.status(400).json({ message: "Product already in favorites" });
+		}
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+};
+
+export const deleteFavorites = async (req, res) => {
+	try {
+		const user = await User.findById(req.params.id);
+		const productId = req.params.productId;
+
+		if (!user) {
+			return res.status(404).json({ message: "User not found" });
+		}
+
+		user.favorites = user.favorites.filter(
+			(fav) => fav.toString() !== productId
+		);
+
+		await user.save();
+		res.status(200).json({ message: "Delete successfull" });
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+};
