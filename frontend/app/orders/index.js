@@ -59,7 +59,14 @@ const MyOrdersScreen = () => {
 			<Text style={styles.id}>Order ID: {item._id}</Text>
 			<Text>Date: {new Date(item.createdAt).toLocaleDateString()}</Text>
 			<Text>Total: {item.totalPrice}₺</Text>
-			<Text>Status: {item.isDelivered ? "Delivered" : "Pending"}</Text>
+			<Text>
+				Status:{" "}
+				{item.isDelivered
+					? "✅ Delivered"
+					: item.isPaid
+					? "💰 Paid, not delivered"
+					: "⏳ Not paid"}
+			</Text>
 		</TouchableOpacity>
 	);
 
