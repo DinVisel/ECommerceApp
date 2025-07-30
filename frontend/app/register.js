@@ -1,13 +1,9 @@
 import React, { useState } from "react";
+import { View, Text, Alert, StyleSheet, TouchableOpacity } from "react-native";
 import {
-	View,
-	Text,
-	TextInput,
-	Button,
-	Alert,
-	StyleSheet,
-	TouchableOpacity,
-} from "react-native";
+	TextInput as PaperInput,
+	Button as PaperButton,
+} from "react-native-paper";
 import { useRouter } from "expo-router";
 import API from "../services/api";
 import { Ionicons } from "@expo/vector-icons";
@@ -43,13 +39,13 @@ const RegisterScreen = () => {
 			</TouchableOpacity>
 			<Text style={styles.title}>Kayıt Ol</Text>
 
-			<TextInput
+			<PaperInput
 				placeholder='İsim'
 				value={form.name}
 				onChangeText={(text) => handleChange("name", text)}
 				style={styles.input}
 			/>
-			<TextInput
+			<PaperInput
 				placeholder='E-posta'
 				value={form.email}
 				onChangeText={(text) => handleChange("email", text)}
@@ -57,7 +53,7 @@ const RegisterScreen = () => {
 				keyboardType='email-address'
 				autoCapitalize='none'
 			/>
-			<TextInput
+			<PaperInput
 				placeholder='Şifre'
 				value={form.password}
 				onChangeText={(text) => handleChange("password", text)}
@@ -65,7 +61,13 @@ const RegisterScreen = () => {
 				secureTextEntry
 			/>
 
-			<Button title='Kayıt Ol' onPress={handleRegister} />
+			<PaperButton
+				mode='contained'
+				onPress={handleRegister}
+				style={styles.button}
+			>
+				Register
+			</PaperButton>
 		</View>
 	);
 };

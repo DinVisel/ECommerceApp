@@ -8,10 +8,10 @@ import {
 	ActivityIndicator,
 	TouchableOpacity,
 	TextInput,
-	Button,
 	ScrollView,
 } from "react-native";
 import API from "../../services/api.js";
+import { colors } from "../../constants/theme";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../../contexts/auth.context.js";
@@ -128,18 +128,17 @@ const ProductListScreen = () => {
 		const isFavorited = favoriteIds.includes(item._id);
 		return (
 			<>
-				<TouchableOpacity onPress={() => handleFavoriteToggle(item._id)}>
-					<Ionicons
-						name={isFavorited ? "heart" : "heart-outline"}
-						size={24}
-						color='tomato'
-					/>
-				</TouchableOpacity>
-
 				<TouchableOpacity
 					style={[styles.card, { opacity: item.countInStock === 0 ? 0.5 : 1 }]}
 					onPress={() => router.push(`/products/${item._id}`)}
 				>
+					<TouchableOpacity onPress={() => handleFavoriteToggle(item._id)}>
+						<Ionicons
+							name={isFavorited ? "heart" : "heart-outline"}
+							size={24}
+							color='tomato'
+						/>
+					</TouchableOpacity>
 					<Image
 						source={{
 							uri: item.image || "https://via.placeholder.com/80x80?text=Yok",
@@ -269,10 +268,10 @@ const styles = StyleSheet.create({
 		marginRight: 8,
 	},
 	selectedCategory: {
-		backgroundColor: "#2196F3",
+		backgroundColor: colors.primary,
 	},
 	searchInput: {
-		backgroundColor: "#f0f0f0",
+		backgroundColor: "#f9f9f9",
 		paddingHorizontal: 12,
 		paddingVertical: 8,
 		borderRadius: 10,
@@ -280,13 +279,13 @@ const styles = StyleSheet.create({
 	},
 	priceInput: {
 		flex: 1,
-		backgroundColor: "#f0f0f0",
+		backgroundColor: "#f9f9f9",
 		paddingHorizontal: 10,
 		paddingVertical: 8,
 		borderRadius: 10,
 	},
 	filterButton: {
-		backgroundColor: "#2196F3",
+		backgroundColor: colors.primary,
 		paddingHorizontal: 16,
 		paddingVertical: 8,
 		borderRadius: 10,

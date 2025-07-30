@@ -2,6 +2,7 @@ import { Tabs } from "expo-router";
 import { useAuth } from "../../contexts/auth.context.js";
 import { Ionicons } from "@expo/vector-icons";
 import { ActivityIndicator } from "react-native";
+import theme, { colors } from "../../constants/theme";
 
 export default function TabsLayout() {
 	const { loading } = useAuth();
@@ -13,7 +14,8 @@ export default function TabsLayout() {
 	return (
 		<Tabs
 			screenOptions={{
-				tabBarActiveTintColor: "tomato",
+				tabBarActiveTintColor: colors.primary,
+				tabBarStyle: { backgroundColor: theme.colors.card },
 				headerShown: false,
 			}}
 		>

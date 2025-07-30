@@ -1,13 +1,9 @@
 import React, { useState, useContext } from "react";
+import { View, Text, Alert, StyleSheet, TouchableOpacity } from "react-native";
 import {
-	View,
-	Text,
-	TextInput,
-	Button,
-	Alert,
-	StyleSheet,
-	TouchableOpacity,
-} from "react-native";
+	TextInput as PaperInput,
+	Button as PaperButton,
+} from "react-native-paper";
 import { useRouter } from "expo-router";
 import API from "../services/api";
 import { AuthContext } from "../contexts/auth.context.js";
@@ -49,7 +45,7 @@ const LoginScreen = () => {
 			</TouchableOpacity>
 			<Text style={styles.title}>Login</Text>
 
-			<TextInput
+			<PaperInput
 				placeholder='Email'
 				value={form.email}
 				onChangeText={(text) => handleChange("email", text)}
@@ -57,7 +53,7 @@ const LoginScreen = () => {
 				keyboardType='email-address'
 				autoCapitalize='none'
 			/>
-			<TextInput
+			<PaperInput
 				placeholder='Password'
 				value={form.password}
 				onChangeText={(text) => handleChange("password", text)}
@@ -65,7 +61,9 @@ const LoginScreen = () => {
 				secureTextEntry
 			/>
 
-			<Button title='Login' onPress={handleLogin} />
+			<PaperButton mode='contained' onPress={handleLogin} style={styles.button}>
+				Login
+			</PaperButton>
 		</View>
 	);
 };
@@ -73,13 +71,8 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
 	container: { flex: 1, justifyContent: "center", padding: 20 },
 	title: { fontSize: 24, marginBottom: 24, textAlign: "center" },
-	input: {
-		borderWidth: 1,
-		borderColor: "#ccc",
-		borderRadius: 6,
-		padding: 10,
-		marginBottom: 16,
-	},
+	input: { marginBottom: 16 },
+	button: { marginTop: 8 },
 });
 
 export default LoginScreen;
