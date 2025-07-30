@@ -7,6 +7,7 @@ import {
 	StyleSheet,
 	Alert,
 	TouchableOpacity,
+	ActivityIndicator,
 } from "react-native";
 import { CartContext } from "../../contexts/cart.context.js";
 import API from "../../services/api";
@@ -23,6 +24,7 @@ const CheckoutScreen = () => {
 		country: "",
 	});
 	const [paymentMethod, setPaymentMethod] = useState("Credit Card");
+	const [processingPayment, setProcessingPayment] = useState(false);
 	const router = useRouter();
 	const { user } = useAuth();
 
@@ -31,6 +33,9 @@ const CheckoutScreen = () => {
 		0
 	);
 
+	const processPayment = () =>
+		new Promise((resolve) => setTimeout(resolve, 2000));
+
 	const placeOrder = async () => {
 		if (!shippingAddress.address.trim()) {
 			Alert.alert("Missing Address", "Please enter a shipping address");
@@ -38,6 +43,8 @@ const CheckoutScreen = () => {
 		}
 
 		try {
+			setProcessingPayment(true);
+			await processPayment();
 			const res = await API.post(
 				"/orders",
 				{
@@ -51,12 +58,15 @@ const CheckoutScreen = () => {
 				}
 			);
 
+			Alert.alert("Payment Successful", "Your payment has been processed.");
 			clearCart();
 			Alert.alert("Order Placed", "Your order has been placed succesfully");
 			router.replace("/");
 		} catch (error) {
 			console.error("Order error:", error);
 			Alert.alert("Error", "Failed to place order.");
+		} finally {
+			setProcessingPayment(false);
 		}
 	};
 
@@ -97,7 +107,11 @@ const CheckoutScreen = () => {
 
 			<Text style={styles.total}>Total: {totalPrice}₺</Text>
 
-			<Button title='Place Order' onPress={placeOrder} />
+			{processingPayment ? (
+				<ActivityIndicator size='large' />
+			) : (
+				<Button title='Place Order' onPress={placeOrder} />
+			)}
 		</View>
 	);
 };
