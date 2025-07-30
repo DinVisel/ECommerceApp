@@ -19,7 +19,7 @@ export default function MyProductsScreen() {
 
 	const fetchSellerProducts = async () => {
 		try {
-			const res = await API.get(`/products?sellerId=${user.id}`);
+			const res = await API.get("/products/mine");
 			setProducts(res.data);
 		} catch (err) {
 			console.error("Ürünler alınırken hata:", err.message);
@@ -39,7 +39,7 @@ export default function MyProductsScreen() {
 	const renderProduct = ({ item }) => (
 		<TouchableOpacity
 			style={styles.card}
-			onPress={() => router.push(`/seller/product/${item._id}`)}
+			onPress={() => router.push(`/products/${item._id}`)}
 		>
 			<Text style={styles.name}>{item.name}</Text>
 			<Text>Fiyat: {item.price} ₺</Text>

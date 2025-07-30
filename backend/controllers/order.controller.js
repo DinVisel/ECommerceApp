@@ -1,7 +1,14 @@
 import Order from "../models/order.model.js";
+import Product from "../models/product.model.js";
 
 export const createOrder = async (req, res) => {
-	const { orderItems, shippingAddress, paymentMethod, totalPrice } = req.body;
+	const {
+		orderItems,
+		shippingAddress,
+		paymentMethod,
+		totalPrice,
+		shippingCost = 0,
+	} = req.body;
 
 	if (!orderItems || orderItems.length === 0)
 		return res.status(400).json({ message: "Order cannot be empty" });
@@ -13,6 +20,7 @@ export const createOrder = async (req, res) => {
 			shippingAddress,
 			paymentMethod,
 			totalPrice,
+			shippingCost,
 			status: "Getting ready",
 		});
 

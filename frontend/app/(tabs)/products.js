@@ -17,18 +17,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../../contexts/auth.context.js";
 
 const addToFavorites = (userId, productId, token) =>
-	API.post(
-		`/users/${userId}/favorites`,
-		{ productId },
-		{ headers: { Authorization: `Bearer ${token}` } }
-	);
+	API.post(`/users/${userId}/favorites/${productId}`, null, {
+		headers: { Authorization: `Bearer ${token}` },
+	});
 
 const removeFromFavorites = (userId, productId, token) =>
-	API.delete(
-		`/users/${userId}/favorites`,
-		{ productId },
-		{ headers: { Authorization: `Bearer ${token}` } }
-	);
+	API.delete(`/users/${userId}/favorites/${productId}`, {
+		headers: { Authorization: `Bearer ${token}` },
+	});
 
 export const getFavorites = (userId, token) =>
 	API.get(`/users/${userId}/favorites`, {
@@ -39,12 +35,13 @@ const ProductListScreen = () => {
 	const [products, setProducts] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
+	const { user } = useAuth();
 	const [keyword, setKeyword] = useState("");
 	const [category, setCategory] = useState("");
 	const [minPrice, setMinPrice] = useState("");
 	const [maxPrice, setMaxPrice] = useState("");
 	const [categories, setCategories] = useState([]);
-	const [isFavorited, setIsFavorited] = useState(false);
+	const [favoriteIds, setFavoriteIds] = useState([]);
 
 	const loadProducts = async () => {
 		try {
@@ -81,28 +78,30 @@ const ProductListScreen = () => {
 		loadProducts();
 	};
 
-	const checkFavorites = async () => {
+	const loadFavorites = async () => {
+		if (!user) return;
 		try {
 			const res = await getFavorites(user._id, user.token);
-			const favorited = res.data.some((p) => p._id === product._id);
-			setIsFavorited(favorited);
+			setFavoriteIds(res.data.map((p) => p._id));
 		} catch (err) {
 			console.log("Favori kontrol hatası:", err.message);
 		}
 	};
 
-	const handleFavoriteToggle = async () => {
+	const handleFavoriteToggle = async (productId) => {
+		const favorited = favoriteIds.includes(productId);
 		try {
-			if (isFavorited) {
-				await removeFromFavorites(user._id, product._id, user.token);
-				setIsFavorited(false);
+			if (favorited) {
+				await removeFromFavorites(user._id, productId, user.token);
+				setFavoriteIds(favoriteIds.filter((id) => id !== productId));
 			} else {
-				await addToFavorites(user._id, product._id, user.token);
-				setIsFavorited(true);
+				await addToFavorites(user._id, productId, user.token);
+				setFavoriteIds([...favoriteIds, productId]);
 			}
 		} catch (err) {
 			alert(
-				"Favori işlemi başarısız: " + err.response?.data?.message || err.message
+				"Favori işlemi başarısız: " +
+					(err.response?.data?.message || err.message)
 			);
 		}
 	};
@@ -110,7 +109,7 @@ const ProductListScreen = () => {
 	useEffect(() => {
 		loadProducts();
 		fetchCategories();
-		checkFavorites();
+		loadFavorites();
 	}, []);
 
 	if (loading) {
@@ -125,34 +124,39 @@ const ProductListScreen = () => {
 		);
 	}
 
-	const renderItem = ({ item }) => (
-		<>
-			<TouchableOpacity onPress={handleFavoriteToggle}>
-				<Ionicons
-					name={isFavorited ? "heart" : "heart-outline"}
-					size={24}
-					color='tomato'
-				/>
-			</TouchableOpacity>
+	const renderItem = ({ item }) => {
+		const isFavorited = favoriteIds.includes(item._id);
+		return (
+			<>
+				<TouchableOpacity onPress={() => handleFavoriteToggle(item._id)}>
+					<Ionicons
+						name={isFavorited ? "heart" : "heart-outline"}
+						size={24}
+						color='tomato'
+					/>
+				</TouchableOpacity>
 
-			<TouchableOpacity
-				style={[styles.card, { opacity: item.countInStock === 0 ? 0.5 : 1 }]}
-				onPress={() => router.push(`/products/${item._id}`)}
-			>
-				<Image
-					source={{
-						uri: item.image || "https://via.placeholder.com/80x80?text=Yok",
-					}}
-					style={styles.image}
-				/>
-				<View>
-					<Text style={styles.name}>{item.name}</Text>
-					<Text>{item.price}₺</Text>
-					<Text style={{ color: "#666" }}>{item.countInStock} adet stokta</Text>
-				</View>
-			</TouchableOpacity>
-		</>
-	);
+				<TouchableOpacity
+					style={[styles.card, { opacity: item.countInStock === 0 ? 0.5 : 1 }]}
+					onPress={() => router.push(`/products/${item._id}`)}
+				>
+					<Image
+						source={{
+							uri: item.image || "https://via.placeholder.com/80x80?text=Yok",
+						}}
+						style={styles.image}
+					/>
+					<View>
+						<Text style={styles.name}>{item.name}</Text>
+						<Text>{item.price}₺</Text>
+						<Text style={{ color: "#666" }}>
+							{item.countInStock} adet stokta
+						</Text>
+					</View>
+				</TouchableOpacity>
+			</>
+		);
+	};
 
 	return (
 		<View style={{ flex: 1 }}>

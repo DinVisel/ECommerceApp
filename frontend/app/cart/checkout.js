@@ -32,6 +32,7 @@ const CheckoutScreen = () => {
 		(acc, item) => acc + item.price * item.quantity,
 		0
 	);
+	const shippingCost = 0;
 
 	const processPayment = () =>
 		new Promise((resolve) => setTimeout(resolve, 2000));
@@ -50,8 +51,9 @@ const CheckoutScreen = () => {
 				{
 					orderItems: cartItems,
 					totalPrice,
-					shippingAddress: address,
+					shippingAddress,
 					paymentMethod,
+					shippingCost,
 				},
 				{
 					headers: { Authorization: `Bearer ${user.token}` },

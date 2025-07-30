@@ -28,6 +28,7 @@ const CartScreen = () => {
 		(acc, item) => acc + item.price * item.quantity,
 		0
 	);
+	const shippingCost = 0;
 
 	const confirmOrder = async () => {
 		try {
@@ -36,6 +37,7 @@ const CartScreen = () => {
 					product: item._id,
 					quantity: item.quantity,
 				})),
+				shippingCost,
 			};
 
 			await API.post("/orders", orderPayload, {

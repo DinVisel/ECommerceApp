@@ -12,8 +12,10 @@ import { LineChart } from "react-native-chart-kit";
 import API from "../../services/api.js";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useAuth } from "../../contexts/auth.context.js";
 
 const MonthlyRevenueScreen = () => {
+	const { user } = useAuth();
 	const [revenue, setRevenue] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();

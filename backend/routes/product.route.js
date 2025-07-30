@@ -23,7 +23,6 @@ router.delete(
 	authorizeRoles("admin", "seller"),
 	deleteProduct
 );
-router.get("/categories", getCategories);
 router.get("/mine", protect, authorizeRoles("admin", "seller"), getMyProducts);
 
 export default router;
