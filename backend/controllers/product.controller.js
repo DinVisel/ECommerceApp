@@ -102,3 +102,12 @@ export const getCategories = async (req, res) => {
 		res.status(500).json({ message: "Kategoriler getirilemedi", error });
 	}
 };
+
+export const getMyProducts = async (req, res) => {
+	try {
+		const products = await Product.find({ seller: req.user._id });
+		res.status(200).json(products);
+	} catch (error) {
+		res.status(500).json({ message: "Urunler getirilemedi", error });
+	}
+};

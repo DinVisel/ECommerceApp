@@ -92,3 +92,28 @@ export const getMyOrders = async (req, res) => {
 		res.status(500).json({ message: "Siparişler alınamadı", error });
 	}
 };
+
+export const getSellerOrders = async (req, res) => {
+	try {
+		// Satıcıya ait ürünleri bul
+		const sellerProducts = await Product.find({ seller: req.user._id }).select(
+			"_id"
+		);
+		const sellerProductIds = sellerProducts.map((p) => p._id.toString());
+
+		// Tüm siparişlerdeki ürünleri kontrol et
+		const allOrders = await Order.find().populate("user", "name email");
+
+		// Sadece seller'ın ürünlerini içeren siparişleri filtrele
+		const sellerOrders = allOrders.filter((order) =>
+			order.orderItems.some((item) =>
+				sellerProductIds.includes(item.product.toString())
+			)
+		);
+
+		res.json(sellerOrders);
+	} catch (error) {
+		console.error("Seller order error:", error);
+		res.status(500).json({ message: "Satıcı siparişleri alınamadı", error });
+	}
+};

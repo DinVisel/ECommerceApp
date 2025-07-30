@@ -7,6 +7,7 @@ import {
 	getOrderById,
 	markOrderAsPaid,
 	markOrderAsDelivered,
+	getSellerOrders,
 } from "../controllers/order.controller.js";
 import { protect, authorizeRoles } from "../middlewares/auth.middleware.js";
 
@@ -28,5 +29,11 @@ router.patch(
 	markOrderAsDelivered
 );
 router.get("/:id", protect, getOrderById);
+router.get(
+	"/seller",
+	protect,
+	authorizeRoles("admin", "seller"),
+	getSellerOrders
+);
 
 export default router;

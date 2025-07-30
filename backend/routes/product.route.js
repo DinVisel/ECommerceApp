@@ -6,6 +6,7 @@ import {
 	updateProduct,
 	deleteProduct,
 	getCategories,
+	getMyProducts,
 } from "../controllers/product.controller.js";
 import { protect, authorizeRoles } from "../middlewares/auth.middleware.js";
 
@@ -23,5 +24,6 @@ router.delete(
 	deleteProduct
 );
 router.get("/categories", getCategories);
+router.get("/mine", protect, authorizeRoles("admin", "seller"), getMyProducts);
 
 export default router;
