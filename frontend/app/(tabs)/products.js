@@ -16,6 +16,25 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../../contexts/auth.context.js";
 
+const addToFavorites = (userId, productId, token) =>
+	API.post(
+		`/users/${userId}/favorites`,
+		{ productId },
+		{ headers: { Authorization: `Bearer ${token}` } }
+	);
+
+const removeFromFavorites = (userId, productId, token) =>
+	API.delete(
+		`/users/${userId}/favorites`,
+		{ productId },
+		{ headers: { Authorization: `Bearer ${token}` } }
+	);
+
+export const getFavorites = (userId, token) =>
+	API.get(`/users/${userId}/favorites`, {
+		headers: { Authorization: `Bearer ${token}` },
+	});
+
 const ProductListScreen = () => {
 	const [products, setProducts] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -60,32 +79,6 @@ const ProductListScreen = () => {
 		setMinPrice("");
 		setMaxPrice("");
 		loadProducts();
-	};
-
-	const addToFavorites = (userId, productId, token) => {
-		API.post(
-			`/users/${userId}/favorites`,
-			{ productId },
-			{
-				headers: { Authorization: `Bearer ${token}` },
-			}
-		);
-	};
-
-	const removeFromFavorites = (userId, productId, token) => {
-		API.delete(
-			`/users/${userId}/favorites`,
-			{ productId },
-			{
-				headers: { Authorization: `Bearer ${token}` },
-			}
-		);
-	};
-
-	const getFavorites = (userId, token) => {
-		API.get(`/users/${userId}/favorites`, {
-			headers: { Authorization: `Bearer ${token}` },
-		});
 	};
 
 	const checkFavorites = async () => {
@@ -306,4 +299,3 @@ const styles = StyleSheet.create({
 });
 
 export default ProductListScreen;
-export { getFavorites };

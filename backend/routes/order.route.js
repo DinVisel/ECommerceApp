@@ -14,8 +14,13 @@ const router = express.Router();
 
 router.post("/", protect, createOrder);
 router.get("/myorders", protect, getMyOrders);
-router.get("/", protect, authorizeRoles("admin"), getAllOrders);
-router.patch("/:id/pay", protect, authorizeRoles("admin"), markOrderAsPaid);
+router.get("/", protect, authorizeRoles("admin", "seller"), getAllOrders);
+router.patch(
+	"/:id/pay",
+	protect,
+	authorizeRoles("admin", "seller"),
+	markOrderAsPaid
+);
 router.patch(
 	"/:id/deliver",
 	protect,

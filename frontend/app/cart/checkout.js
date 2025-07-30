@@ -8,15 +8,23 @@ import {
 	Alert,
 	TouchableOpacity,
 } from "react-native";
-import { CartContext } from "../../contexts/cart.context";
+import { CartContext } from "../../contexts/cart.context.js";
 import API from "../../services/api";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "../../contexts/auth.context.js";
 
 const CheckoutScreen = () => {
 	const { cartItems, clearCart } = useContext(CartContext);
-	const [address, setAddress] = useState("");
+	const [shippingAddress, setShippingAddress] = useState({
+		address: "",
+		city: "",
+		postalCode: "",
+		country: "",
+	});
+	const [paymentMethod, setPaymentMethod] = useState("Credit Card");
 	const router = useRouter();
+	const { user } = useAuth();
 
 	const totalPrice = cartItems.reduce(
 		(acc, item) => acc + item.price * item.quantity,
@@ -24,18 +32,24 @@ const CheckoutScreen = () => {
 	);
 
 	const placeOrder = async () => {
-		if (!address.trim()) {
+		if (!shippingAddress.address.trim()) {
 			Alert.alert("Missing Address", "Please enter a shipping address");
 			return;
 		}
 
 		try {
-			const res = await API.post("/orders", {
-				orderItems: cartItems,
-				totalPrice,
-				shippingAddress: address,
-				paymentMethod: "Cash",
-			});
+			const res = await API.post(
+				"/orders",
+				{
+					orderItems: cartItems,
+					totalPrice,
+					shippingAddress: address,
+					paymentMethod,
+				},
+				{
+					headers: { Authorization: `Bearer ${user.token}` },
+				}
+			);
 
 			clearCart();
 			Alert.alert("Order Placed", "Your order has been placed succesfully");
@@ -54,10 +68,32 @@ const CheckoutScreen = () => {
 			<Text style={styles.label}>Shipping Address</Text>
 			<TextInput
 				style={styles.input}
-				value={address}
-				onChangeText={setAddress}
+				value={shippingAddress.address}
+				onChangeText={(text) =>
+					setShippingAddress({ ...shippingAddress, address: text })
+				}
 				placeholder='Enter your address'
 			/>
+
+			<TouchableOpacity onPress={() => setPaymentMethod("Kredi Kartı")}>
+				<Text
+					style={
+						paymentMethod === "Kredi Kartı" ? styles.selected : styles.option
+					}
+				>
+					🏦 Kredi Kartı
+				</Text>
+			</TouchableOpacity>
+
+			<TouchableOpacity onPress={() => setPaymentMethod("Kapıda Ödeme")}>
+				<Text
+					style={
+						paymentMethod === "Kapıda Ödeme" ? styles.selected : styles.option
+					}
+				>
+					💸 Kapıda Ödeme
+				</Text>
+			</TouchableOpacity>
 
 			<Text style={styles.total}>Total: {totalPrice}₺</Text>
 
@@ -77,6 +113,20 @@ const styles = StyleSheet.create({
 		borderRadius: 6,
 	},
 	total: { fontSize: 16, fontWeight: "bold", marginBottom: 20 },
+	option: {
+		padding: 10,
+		backgroundColor: "#f2f2f2",
+		borderRadius: 6,
+		marginBottom: 10,
+	},
+	selected: {
+		padding: 10,
+		backgroundColor: "#d1e7dd",
+		borderColor: "green",
+		borderWidth: 1,
+		borderRadius: 6,
+		marginBottom: 10,
+	},
 });
 
 export default CheckoutScreen;

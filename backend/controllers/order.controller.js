@@ -13,6 +13,7 @@ export const createOrder = async (req, res) => {
 			shippingAddress,
 			paymentMethod,
 			totalPrice,
+			status: "Getting ready",
 		});
 
 		const createdOrder = await order.save();
