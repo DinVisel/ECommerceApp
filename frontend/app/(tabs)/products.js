@@ -306,3 +306,4 @@ const styles = StyleSheet.create({
 });
 
 export default ProductListScreen;
+export { getFavorites };

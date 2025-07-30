@@ -52,6 +52,10 @@ export default function AccountScreen() {
 				title='Profili Düzenle'
 				onPress={() => router.push("/account/edit-profile")}
 			/>
+			<Button
+				title='Favorites'
+				onPress={() => router.push("/account/favorites")}
+			/>
 
 			<View style={styles.buttonContainer}>
 				<Button title='Logout' onPress={logout} color='red' />
